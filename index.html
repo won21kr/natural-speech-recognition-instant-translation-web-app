@@ -1,0 +1,2128 @@
+
+
+
+
+
+<!DOCTYPE html>
+
+<html class="no-js consumer" lang="en"> <!-- Page Specific -->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  
+<meta charset="UTF-8">
+<meta content="width=1040, user-scalable=yes" name="viewport">
+
+<link rel="alternate" hreflang="x-default" href="https://speechlogger.appspot.com/en/" />
+<link rel="alternate" hreflang="en" href="https://speechlogger.appspot.com/en/" />
+<link rel="alternate" hreflang="ro" href="https://speechlogger.appspot.com/ro/" />
+<link rel="alternate" hreflang="he" href="https://speechlogger.appspot.com/he/" />
+
+<script>
+(function(e, p){
+  var m = location.href.match(/platform=(win8|win|mac|linux|cros)/);
+  e.id = (m && m[1]) ||
+  (p.indexOf('Windows NT 6.2') > -1 ? 'win8' : p.indexOf('Windows') > -1 ? 'win' : p.indexOf('Mac') > -1 ? 'mac' : p.indexOf('CrOS') > -1 ? 'cros' : 'linux');
+  e.className = e.className.replace(/\bno-js\b/,'js');
+})(document.documentElement, window.navigator.userAgent)
+</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<!-- <script src="https://sandbox.google.com/checkout/inapp/lib/buy.js"></script> -->
+<script src="https://wallet.google.com/inapp/lib/buy.js"></script>
+
+<link href="../images/icon.ico" rel="icon" type="image/x-icon"> 
+
+<link rel="stylesheet" type="text/css" href='../resources/style.css'>  
+<link id="stylesheet" rel="stylesheet" type="text/css">  
+
+<script language="javascript">
+  function changeStyle(){
+    if (localStorage.getItem("style")==="full") {
+    	localStorage.setItem("style","default");
+    	document.getElementById('stylesheet').href='../resources/styleRegular.css';
+    	view_option.innerHTML='Full Screen View';
+      $('#change_view_button').attr('title','Full Screen View');
+      $('#change_view_img').attr("src", '../images/largeView.png');
+    	$(document).off('keyup');
+    } else {
+    	localStorage.setItem("style","full");
+      document.getElementById('stylesheet').href='../resources/styleEnlarge.css';
+      view_option.innerHTML='Back to Regular View';
+      $('#change_view_button').attr('title','Back to Regular View');
+      $('#change_view_img').attr("src", '../images/regularView.png');      
+    	  $('.activityContainer').keypress(keypressHandler);
+    	$(document).keyup(function(e) {
+    		 if (e.keyCode == 27) { changeStyle(); }   // esc
+    	});    	  
+    }
+  }
+  
+  if (localStorage.getItem("style")==="full") {
+	    document.getElementById('stylesheet').href='../resources/styleEnlarge.css';
+	} else document.getElementById('stylesheet').href='../resources/styleRegular.css';
+</script>       
+<script>
+//localStorage.clear(); //For debugging purposes...
+//var version="1.000";
+//if (localStorage.version!==version) { localStorage.clear(); localStorage.version=version;     localStorage.sessionsList=""; }
+var local_language = window.navigator.userLanguage || window.navigator.language;
+if (localStorage.interface_language){
+} else {
+}
+
+if (localStorage.getItem("sessionsList")===null) { localStorage.setItem("sessionsList","");}
+if (localStorage.getItem("uniqueID")===null) { localStorage.setItem("uniqueID",renderUniqueID()); console.log("uniqueID = " + localStorage.getItem("uniqueID"));}
+if (localStorage.getItem("everPaid")===null) { localStorage.setItem("everPaid","false");}
+if (localStorage.getItem("currentCredit")===null) { localStorage.setItem("currentCredit","0");}
+
+function renderUniqueID() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for( var i=0; i < 10; i++ )
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  return text;
+}
+
+function purchase(dollars) {
+  var jwtStr, credits;
+  switch(dollars) {
+  case 0.25:
+	  jwtStr = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIxMzAwOTY2MzE5NDcwN" + 
+      "jg5OTAxMiIsImF1ZCI6Ikdvb2dsZSIsInR5cCI6Imdvb2dsZS9" + 
+      "wYXltZW50cy9pbmFwcC9pdGVtL3YxIiwiaWF0IjoxNDEwODU0N" + 
+      "Tc2LCJleHAiOjE1MTA5NDA4NTUsInJlcXVlc3QiOnsiY3VycmV" + 
+      "uY3lDb2RlIjoiVVNEIiwicHJpY2UiOiIwLjI1IiwibmFtZSI6I" + 
+      "lNwZWVjaGxvZ2dlciBDcmVkaXQiLCJzZWxsZXJEYXRhIjoic3B" + 
+      "lZWNobG9nZ2VyLmFwcHNwb3QuY29tIiwiZGVzY3JpcHRpb24iO" + 
+      "iIxLDAwMCBDaGFyYWN0ZXJzIHRvIHRyYW5zbGF0ZSJ9fQ.BPh3" + 
+      "3cGv7Qsz4mVaD0lGq8Pgyko0bj3q_zJj6HbeOc8";
+	  credits = 1000;
+    break;
+  case 1:
+	  jwtStr = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIxMzAwOTY2MzE5NDcwN" + 
+      "jg5OTAxMiIsImF1ZCI6Ikdvb2dsZSIsInR5cCI6Imdvb2dsZS9" + 
+      "wYXltZW50cy9pbmFwcC9pdGVtL3YxIiwiaWF0IjoxNDEwODU0N" + 
+      "zIxLCJleHAiOjE1MTA5NDEwNTUsInJlcXVlc3QiOnsiY3VycmV" + 
+      "uY3lDb2RlIjoiVVNEIiwicHJpY2UiOiIxIiwibmFtZSI6IlNwZ" + 
+      "WVjaGxvZ2dlciBDcmVkaXQiLCJzZWxsZXJEYXRhIjoic3BlZWN" + 
+      "obG9nZ2VyLmFwcHNwb3QuY29tIiwiZGVzY3JpcHRpb24iOiIxM" + 
+      "CwwMDAgQ2hhcmFjdGVycyB0byB0cmFuc2xhdGUifX0.ln5-fwi" + 
+      "1Cmap-eHt0nuiq7uhxVjjfCtGSYbmFZqQOOI";
+	  credits = 10000;
+	  break;
+  case 2:
+	  jwtStr = "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIxMzAwOTY2MzE5NDcwN" + 
+      "jg5OTAxMiIsImF1ZCI6Ikdvb2dsZSIsInR5cCI6Imdvb2dsZS9" + 
+      "wYXltZW50cy9pbmFwcC9pdGVtL3YxIiwiaWF0IjoxNDEwODU0N" + 
+      "zcwLCJleHAiOjE1MTA5NDExNjAsInJlcXVlc3QiOnsiY3VycmV" + 
+      "uY3lDb2RlIjoiVVNEIiwicHJpY2UiOiIyIiwibmFtZSI6IlNwZ" + 
+      "WVjaGxvZ2dlciBDcmVkaXQiLCJzZWxsZXJEYXRhIjoic3BlZWN" + 
+      "obG9nZ2VyLmFwcHNwb3QuY29tIiwiZGVzY3JpcHRpb24iOiI0M" + 
+      "CwwMDAgQ2hhcmFjdGVycyB0byB0cmFuc2xhdGUifX0.IzMruPB" + 
+      "kCz-kzn9ssk8vxGicade9BOZoFTTLcgaZK0Q";
+    credits = 40000;
+    break;
+  }
+	google.payments.inapp.buy({
+	  jwt: jwtStr,
+	  success: function() { credit(credits); },
+	  failure: function() { window.alert('Purchase failed. No transaction made.')}
+	});
+}
+
+function resetCredit() {
+  url="../resources/reset_credit.jsp";
+  var post2credit = $.post( url, { creditKey: localStorage.getItem("creditKey") } );
+  localStorage.setItem("currentCredit","0");
+  credit_show.innerHTML = "<b>"+localStorage.getItem("currentCredit")+"</b>";
+  credit_show2.innerHTML = "<b>"+localStorage.getItem("currentCredit")+"</b>";
+}
+
+function credit(addCredit) {
+	if (localStorage.getItem("everPaid")!=="true") {
+		localStorage.setItem("everPaid","true");
+    //---Send to server, and update datastore :)
+	  url="../resources/new_credit.jsp";
+	  var post2credit = $.post( url, { uniqueID: localStorage.getItem("uniqueID"), addCredit: addCredit});
+	  post2credit.done(function( data ) { 
+	    localStorage.setItem("creditKey",data);
+	    localStorage.setItem("currentCredit",addCredit);
+	    credit_show.innerHTML = "<b>"+localStorage.getItem("currentCredit")+"</b>";
+	    credit_show2.innerHTML = "<b>"+localStorage.getItem("currentCredit")+"</b>";  	    
+	  });
+	  return addCredit;
+	} else {
+		//---Send to server, and update datastore :)
+		url="../resources/update_credit.jsp";
+		var post2credit = $.post( url, { creditKey: localStorage.getItem("creditKey"), addCredit: addCredit});
+		var newCredit;
+		post2credit.done(function( data ) { 
+			newCredit = parseInt(data);
+			console.log("newCredit= " + data);
+		  localStorage.setItem("currentCredit",newCredit);
+		  credit_show.innerHTML = "<b>"+localStorage.getItem("currentCredit")+"</b>";
+		  credit_show2.innerHTML = "<b>"+localStorage.getItem("currentCredit")+"</b>";	
+		});
+	  
+		return newCredit;	  
+	}
+}
+
+//Global parameters...
+mainURL=encodeURIComponent('https://speechlogger.appspot.com/');
+
+</script>
+
+
+
+  <meta content="Natural-Speech-to-Text web application for FREE. Includes automatic transcription for dictation, captioning (phone, movies, interviews) and instant voice translation." name="description"/>  
+  <title>Speechlogger | Voice Recognition & Instant Translation</title>
+  <link rel="canonical" href="https://speechlogger.appspot.com/en/" />
+  <meta name="google-translate-customization" content="6d9589dcc31b9e80-31d4b56986c25c3b-g0aa6e60c6db882bb-1c"></meta>
+</head>
+
+<body onunload="pauseRecognition();">
+
+<div id="google_translate_element"></div>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.FloatPosition.TOP_RIGHT, gaTrack: true, gaId: 'UA-47292499-1'}, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+	<script>
+  var monthNames = [ "January", "February", "March", "April", "May", "June",
+                     "July", "August", "September", "October", "November", "December" ];
+  var newDate = new Date();
+  var sessionTitle="";
+  if (localStorage.getItem("sessionIndex")===null) { 
+    localStorage.sessionIndex="1";
+    sessionTitle="Welcome! ";
+  }
+  sessionTitle+="Speechlogger Session #";  
+  
+  var timeDisplay_list = 
+    [['None', 'none'],
+    ['Time from Start', 'dif'],
+    ['Real Time', 'real']];       
+   
+  //Language-specific parameters
+  var interfaceLang="en";
+  var defaultTrans="Spanish";
+  </script>
+
+
+
+	
+
+
+<!-- body tag unnecessary, already in main document -->
+<!-- TODO: More layouts: Full screen, Print, ...
+      Connect to database for sequences... -->
+
+
+<div id="header">
+  <!-- <div id="globe"></div> -->     
+  <select id="interface_lang" onchange="updateInterface();"></select>
+  <script>
+  var in_langs = ['English','Deutsch','español','français','России','română','日本の','中國','עברית']; //TODO: cases by index, not value, that is language dependent, or make the values lang-independent by using both english and native names
+  var in_langs_codes = ['en','de','es','fr','ru','ro','ja','zh','he']; 
+  for (var i = 0; i < in_langs.length; i++) {
+    interface_lang.options[i] = new Option(in_langs[i], in_langs_codes[i]); // (text,value)
+  }
+  </script>
+</div>
+
+  <div id="share_menu">
+    <div id="share_buttons">
+      <a class="shareButton" id="facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fspeechlogger.appspot.com" target="_blank"></a>
+      <a class="shareButton" id="gplus" target="_blank" href="https://plus.google.com/share?url=https%3A%2F%2Fspeechlogger.appspot.com"></a>
+      <a class="shareButton" id="twitter" target="_blank" href="http://twitter.com/share?url=https%3A%2F%2Fspeechlogger.appspot.com"></a>
+      <a class="shareButton" id="email" target="_blank" href='mailto:?subject=I%20found%20an%20interesting%20app%3A%20SpeechLogger&body=Speechlogger%20-%20Automatic%20Transcription%20%26%20Instant%20Voice%20Translation%0Ahttps%3A%2F%2Fspeechlogger.appspot.com'></a>
+    </div>
+  </div>
+
+<div class="ad_120x600_container_right ad">
+<div class="ad_120x600_mid_cont_right">
+<div class="ad_120x600 ad">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_120x600 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:120px;height:600px"
+     data-ad-client="ca-pub-5030295218223297"
+     data-ad-slot="8519560801"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+</div>
+</div>
+
+<div class="ad_120x600_container_left ad">
+<div class="ad_120x600_mid_cont_left">
+
+<div class="ad_120x400 ad">
+<SCRIPT charset="utf-8" type="text/javascript" src="https://ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&MarketPlace=US&ID=V20070822%2FUS%2Fodyeda-20%2F8009%2Ff3516965-7b93-4c94-80cd-b635912a7e2b&Operation=GetScriptTemplate"> </SCRIPT> <NOSCRIPT><A HREF="http://ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&MarketPlace=US&ID=V20070822%2FUS%2Fodyeda-20%2F8009%2Ff3516965-7b93-4c94-80cd-b635912a7e2b&Operation=NoScript">Amazon.com Widgets</A></NOSCRIPT>
+</div>
+
+<div class="ad_120x240 ad">
+<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="https://ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ss&ref=ss_til&ad_type=product_link&tracking_id=odyeda-20&marketplace=amazon&region=US&placement=B008MR36FE&asins=B008MR36FE&linkId=H46KS7NMK3KZEKO6&show_border=true&link_opens_in_new_window=true">
+</iframe>
+</div>
+
+</div>
+</div>
+
+
+<div id="about_pane"> <!--TODO: SEO content: h1, h2, ... - make sure h1 is not changed cause of ... -->
+  <div id="logo"></div>  
+  <h1 id="site_title">Speechlogger | Speech Recognition & Instant Voice Translation</h1>
+  <h2 id="secondary_title">Great Natural-Speech-to-Text web application for FREE. Includes automatic transcription for dictation, captioning (phone, movies, interviews) and instant voice translation. The only free web-app with auto-punctuation, auto save, auto audio file transcription (<a href="#transcribe-audio-files">learn how to</a>) & phone conversations timestamp captioning. No login.  </h2>
+  <!-- <p id="version_notes">This is a beta-release. To make it better we would appreciate <a href='mailto:admin@speechlogger.com' target='_blank'>feedback</a>.</p>  -->
+
+<div class="ad_728x15 ad">  
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_728x15 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:15px"
+     data-ad-client="ca-pub-5030295218223297"
+     data-ad-slot="7042827607"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+  <div id="GSCcontainer">
+    <p id="GSClabel">Google voice search embedded:</p>
+    <div id="Ronens_GCS">
+      <div id="speechSearchButton" onclick="searchStartButton(event);"><img alt="Voice Search" id="search_img" src="../images/searchoff.png"></div>    
+    
+    <script>
+    (function() {
+      var cx = '011257157704033099001:dmmudihaxhs';
+      var gcse = document.createElement('script');
+      gcse.type = 'text/javascript';
+      gcse.async = true;
+      gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+          '//www.google.com/cse/cse.js?cx=' + cx;
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script>
+  <gcse:search></gcse:search>    
+  
+    </div>
+  </div>      
+  
+  <script>
+  $("#Ronens_GCS").on("click", "td .gsc-search-button", function(event){
+	  endVoiceSearch();
+	});
+  </script>
+    
+  <h3 id="second_app">This app is best for real time natural-speech to text and instant translation.<br> If it is a voice controlled notepad (dictation text editor) you are looking for try our <a href="https://speechlogger.appspot.com/en/speechnotes.jsp">NEW: SPEECHNOTES</a>.</h3>  
+</div>
+
+<div id="notification"></div>
+
+<div id="application">
+
+    <div class="activityContainer" id="alert_container">
+      <div class="alertNotification">
+        <div class="activityTitle" id="alert_title"></div>
+        <div class="activityInfo" id="info"></div>
+        <div class="closeButton" onclick="$('.activityContainer').hide();unbindEsc();"></div>
+        <div class="OkButton"></div>
+      </div>
+    </div>
+        
+    <div class="activityContainer" id="punctuation_activity">
+      <div class="alertNotification">
+      <div class="activityTitle" id="punct_act_title">Automatic Punctuation Settings</div>
+      <div class="activityContent">
+      <div>
+        <span class="activityInfo" id="punct_act_info1">If automatic punctuation is on, we will end sentences in </span>
+        <span class="activityInfo" id="punct_act_language"></span>
+        <span class="activityInfo" id="punct_act_info2">with the mark </span>
+        <select id="punctuation_mark" onchange="updateTagList('start');updateTagList('end');updateTagList('any');">
+          <option value="question">?</option>
+          <option value="exclamation">!</option>
+          <option value="colon">:</option>
+        </select>
+        <span class="activityInfo" id="punct_act_info3">when:</span>
+      </div>
+      <div class="activityInfo" id="punct_act_begins_with">The sentences start with one of the following sequences:</div>
+      <div class="tagsDisplay" id="display_start_tags"></div>
+      <div class="editTags">
+        <input id="user_input_tags_start" type="text" placeholder="Input your own sequences here and add them"> <!-- TODO important!!!: value="..{fn:escapeXml(guestbookName)}" -->
+        <button class="OkButton" onclick="addPunctSequences(user_input_tags_start.value,punctuation_mark.value,'start');"><b>ADD</b></button>
+      </div>
+      <div class="activityInfo" id="punct_act_ends_with">Or, when they end with one of the following:</div>
+      <div class="tagsDisplay" id="display_end_tags"></div>
+      <div class="editTags">
+        <input id="user_input_tags_end" type="text" placeholder="Input your own sequences here and add them"> <!-- TODO important!!!: value="..{fn:escapeXml(guestbookName)}" -->
+        <button class="OkButton" onclick="addPunctSequences(user_input_tags_end.value,punctuation_mark.value,'end');"> <b>ADD</b> </button> 
+      </div>
+      <div class="activityInfo" id="punct_act_contains">Or, when they contain one of the following sequences:</div>
+      <div class="tagsDisplay" id="display_any_tags"></div>
+        <div class="editTags">
+        <input id="user_input_tags_any" type="text" placeholder="Input your own sequences here and add them">  <!-- TODO important!!!: value="..{fn:escapeXml(guestbookName)}" -->
+        <button class="OkButton" onclick="addPunctSequences(user_input_tags_any.value,punctuation_mark.value,'any');"> <b>ADD</b> </button>
+      </div>
+      <div>
+         <span class="activityInfo" id="punct_act_info4">In all other cases, we will simply end the sentences with a period.</span>
+      </div>
+      <div class="OkButton"></div>
+      </div>
+      <div class="closeButton" onclick="$('.activityContainer').hide();unbindEsc();"></div>
+      </div>
+    </div>
+
+<!-- ** Old to be replaced by paying option **        
+    <div class="activityContainer" id="translation_key_activity">
+      <div class="alertNotification">
+        <div class="activityTitle" id="translation_key_title">Translation Credit Refill</div>
+        <div class="activityInfo" id="translation_key_info1">Pay with Google - easy and safe. Current credit:     </div>
+        <input id="user_input_translation_key" type="text" placeholder="Google-Translate API key">
+        <div class="activityInfo" id="translation_key_info2">1,000 characters would on average let you translate around 160 words. No refund.</div>
+    
+        <script>
+          if (localStorage.getItem("translationKey")!==null) 
+            $('#user_input_translation_key').attr('value',localStorage.getItem("translationKey"));  
+        </script>
+        <button class="OkButton" onclick="addTranslationKey(user_input_translation_key.value);$('#translation_key_activity').fadeOut(500);">OK</button>
+        <div class="closeButton" onclick="$('.activityContainer').hide();unbindEsc();"></div>
+      </div>
+    </div>
+--> 
+<!-- ** NEW ** TODO: activate + Change + multilingual titles for buttons -->     
+    <div class="activityContainer" id="translation_key_activity">
+      <div class="alertNotification">
+        <div class="activityTitle" id="translation_key_title">Translation Credit Refill</div>
+        <div class="activityInfo" id="translation_key_info1">Pay with Google - easy and safe. Current credit:     &nbsp<span id="credit_show2"></span></div>
+        <div> 
+          <div><p class="purchase_option">Try it out - 0.25$ for 1,000 characters. See if it works for you</p><button class="purchaseButton" id="runDemoButton" onClick="purchase(0.25);">0.25$ for +1,000 c.</button></div>
+          <div><p class="purchase_option">Private plan - 1$ for 10,000 characters. Recommended option for most users</p><button class="purchaseButton" id="runDemoButton" onClick="purchase(1);">1$ for +10,000 c.</button></div>
+          <div><p class="purchase_option">Business pack - 2$ for 40,000 characters. Best value for budget</p><button class="purchaseButton" id="runDemoButton" onClick="purchase(2);">2$ for +40,000 c.</button></div>
+          <!-- <button id="runDemoButton" onClick="resetCredit();">reset</button><br> -->
+        <br>
+        </div>
+        <div class="activityInfo" id="translation_key_info2">1,000 characters would on average let you translate around 160 words. No refund.</div>
+    
+        <div class="closeButton" onclick="$('.activityContainer').hide();unbindEsc();"></div>
+      </div>
+    </div> 
+  
+    <button id="change_view_button" onclick="changeStyle();"><img alt="Preferences" id="change_view_img" src="../images/largeView.png"></button>
+      
+    <button class="menuhead" id="preferences_button"><img alt="Preferences" id="preferences_img" src="../images/preferences.png">
+      <ul class="dropdownmenu" id="preferences">
+        <li id="view_option" onclick="changeStyle();"></li> 
+        <li><input type="checkbox" id="save_checkbox"><label for="save_checkbox" id="lbl_save_checkbox">Auto Save</label></li>
+        <li><span id="lbl_punctuation_checkbox2" onclick="$('#punctuation_activity').fadeIn(500);bindEsc();">Auto-Punctuation Settings</span><span class="optionIcon inlineButton" onclick="$('#punctuation_activity').fadeIn(500);bindEsc();"><img alt="Punctuation Settings" src="../images/small_settings.png"></span></li>
+        <li><input type="checkbox" id="uncertain_checkbox"><label for="uncertain_checkbox" id="lbl_uncertain_checkbox">Red font for results speechlogger is not so sure about</label></li>
+        <li id="lbl_translate_key" onclick="$('#translation_key_activity').fadeIn(500);bindEsc();">Translation-Key</li> 
+        <li><input type="checkbox" id="read_checkbox"><label for="read_checkbox" id="lbl_read_checkbox">Read-Out Translated</label></li>
+        <li><label id="lbl_timeDisplay">Time-labels:</label> &nbsp; <select id="select_timeDisplay" onchange="updateTime()"></select></li>
+        <script>  
+          for (var i = 0; i < timeDisplay_list.length; i++) {
+            select_timeDisplay.options[i] = new Option(timeDisplay_list[i][0], timeDisplay_list[i][1]); // (text,value)
+          }
+        </script>
+        <li>
+          <span id="lbl_background">Background color:</span>
+          <div id="colorpicker">
+            <div class="colorButtons colorGradientBack">
+              <input type="color" id="favcolor" onchange="changeColor('custom');">
+            </div>
+            <div class="colorButtons blueBack" onclick="changeColor('blue')"></div>
+            <div class="colorButtons grayBack" onclick="changeColor('gray')"></div>
+            <div class="colorButtons greenBack" onclick="changeColor('green')"></div>
+            <div class="colorButtons yellowBack" onclick="changeColor('yellow')"></div>
+            <div class="colorButtons redBack" onclick="changeColor('red')"></div>
+          </div>
+        </li>
+      </ul>
+    </button>
+
+  <div id="session_title" contenteditable="true"></div>
+  <input type="text" id="speaker" placeholder="Click on the session's title above to edit it. Click here for notes such as speaker's name and more.">      
+
+  <div id="preferences_line">
+  <div id="left_buttons">
+    <select id="select_language" onchange="updateCountry();"></select> <select id="select_dialect" onchange="updateDialect();"></select> &nbsp;
+    <script>
+    var langs = 
+      [['Afrikaans',       'af',['af-ZA']],
+       ['Arabic',         'ar',['ar-EG','Egypt'],
+                                ['ar-JO','Jordan'],
+                                ['ar-KW','Kuwait'],
+                                ['ar-LB','Lebanon'],
+                                ['ar-QA','Qatar'],
+                                ['ar-AE','UAE'],
+                                ['ar-SA','Saudi Arabia'],
+                                ['ar-MA','Morocco'],
+                                ['ar-IQ','Iraq'],
+                                ['ar-DZ','Algeria']],
+       ['Bahasa-Indonesia','id',['id-ID']],
+       ['Bahasa-Melayu',   'ms',['ms-MY']],
+       ['Bulgarian',       'bg',['bg-BG']],
+       ['Catalan',          'ca',['ca-ES']],
+       ['Chinese',         'zh',['cmn-Hans-CN', '普通话 (中国大陆)'],//chinese
+                             ['cmn-Hans-HK', '普通话 (香港)'],
+                             ['cmn-Hant-TW', '中文 (台灣)'],
+                             ['yue-Hant-HK', '粵語 (香港)']],
+                             ['Czech',         'cs',['cs-CZ']],
+       ['Deutsch',         'de',['de-DE']],
+       ['English',         'en',['en-US', 'United States'],
+                           ['en-AU', 'Australia'],
+                           ['en-CA', 'Canada'],
+                           ['en-IN', 'India'],
+                           ['en-NZ', 'New Zealand'],
+                           ['en-ZA', 'South Africa'],
+                           ['en-GB', 'United Kingdom']],
+       ['español',         'es',['es-AR', 'Argentina'],
+                            ['es-BO', 'Bolivia'],
+                            ['es-CL', 'Chile'],
+      ['es-CO', 'Colombia'],
+      ['es-CR', 'Costa Rica'],
+      ['es-EC', 'Ecuador'],
+      ['es-SV', 'El Salvador'],
+      ['es-ES', 'España'],
+      ['es-US', 'Estados Unidos'],
+      ['es-GT', 'Guatemala'],
+      ['es-HN', 'Honduras'],
+      ['es-MX', 'México'],
+      ['es-NI', 'Nicaragua'],
+      ['es-PA', 'Panamá'],
+      ['es-PY', 'Paraguay'],
+      ['es-PE', 'Perú'],
+      ['es-PR', 'Puerto Rico'],
+      ['es-DO', 'República Dominicana'],
+      ['es-UY', 'Uruguay'],
+      ['es-VE', 'Venezuela']],                           
+       ['Euskara',         'eu',['eu-ES']],
+       ['français',        'fr',['fr-FR']],
+       ['Galego',          'gl',['gl-ES']],
+       ['Hrvatski',        'hr',['hr_HR']],
+       ['Hebrew',          'iw',['he-IL']],
+       ['IsiZulu',         'zu',['zu-ZA']],
+       ['Icelandic',        'is',['is-IS']],
+       ['Italian',        'it',['it-IT', 'Italia'],
+                                ['it-CH', 'Svizzera']],
+       ['Japanese',           'ja',['ja-JP']],
+       ['Korean',          'ko',['ko-KR']],                          
+       ['Magyar',          'hu',['hu-HU']],
+       ['Nederlands',      'nl',['nl-NL']],
+       ['Norwegian',    'nb',['nb-NO']],
+       ['Polski',          'pl',['pl-PL']],
+       ['Português',       'pt',['pt-BR', 'Brasil'],
+                           ['pt-PT', 'Portugal']],
+       ['Romanian',          'ro',['ro-RO']],
+       ['română',          'ro',['ro-RO']],
+       ['Russian',         'ru',['ru-RU']],
+       ['России',         'ru',['ru-RU']],         
+       ['Serbian',          'sr',['sr-RS']],
+       ['Slovak',      'sk',['sk-SK']],
+       ['Spanish',         'es',['es-AR', 'Argentina'],
+                                ['es-BO', 'Bolivia'],
+                                ['es-CL', 'Chile'],
+          ['es-CO', 'Colombia'],
+          ['es-CR', 'Costa Rica'],
+          ['es-EC', 'Ecuador'],
+          ['es-SV', 'El Salvador'],
+          ['es-ES', 'España'],
+          ['es-US', 'Estados Unidos'],
+          ['es-GT', 'Guatemala'],
+          ['es-HN', 'Honduras'],
+          ['es-MX', 'México'],
+          ['es-NI', 'Nicaragua'],
+          ['es-PA', 'Panamá'],
+          ['es-PY', 'Paraguay'],
+          ['es-PE', 'Perú'],
+          ['es-PR', 'Puerto Rico'],
+          ['es-DO', 'República Dominicana'],
+          ['es-UY', 'Uruguay'],
+          ['es-VE', 'Venezuela']],
+       ['Suomi',           'fi',['fi-FI']],
+       ['Svenska',         'sv',['sv-SE']],
+       ['Turkish',          'tr',['tr-TR']],
+       ['Korean',            'ko',['ko-KR']],
+       ['中文',             'zh',['cmn-Hans-CN', '普通话 (中国大陆)'],//chinese
+                           ['cmn-Hans-HK', '普通话 (香港)'],
+                           ['cmn-Hant-TW', '中文 (台灣)'],
+                           ['yue-Hant-HK', '粵語 (香港)']],
+       ['日本の',           'ja',['ja-JP']],
+       ['العربية',         'ar',['ar-EG','Egypt'],
+                                ['ar-JO','Jordan'],
+                                ['ar-KW','Kuwait'],
+                                ['ar-LB','Lebanon'],
+                                ['ar-QA','Qatar'],
+                                ['ar-AE','UAE'],
+                                ['ar-SA','Saudi Arabia'],
+                                ['ar-MA','Morocco'],
+                                ['ar-IQ','Iraq'],
+                                ['ar-DZ','Algeria']],
+       ['עברית', 'iw',         ['he-IL']],
+       ['Latin',   'la',['la']]];
+
+    for (var i = 0; i < langs.length; i++) {
+      select_language.options[i] = new Option(langs[i][0], langs[i][0]); // (text,value)
+    }
+    </script>
+  
+    &nbsp<div style="display:inline-block"><input type="checkbox" id="punctuation_checkbox" style="white-space:nowrap;"><label for="punctuation_checkbox" id="lbl_punctuation_checkbox">Auto-Punctuation</label></div>&nbsp
+    <div style="display:inline-block"><input type="checkbox" id="translate_checkbox"><label for="translate_checkbox" id="lbl_translate_checkbox">Translate  </label></div>
+
+    <div id="translate_options" style="display:none;"> 
+      <select id="translate_lang" onchange="updateTranslateLang();"></select>
+      <script>
+      var trans_langs = 'Afrikaans af Albanian sq Arabic ar Azerbaijani az Basque eu Bengali bn Belarusian be Bulgarian bg Catalan ca Chinese-Simplified zh-CN Chinese-Traditional zh-TW Croatian hr Czech cs Danish da Dutch nl English en Esperanto eo Estonian et Filipino tl Finnish fi French fr Galician gl Georgian ka German de Greek el Gujarati gu Haitian-Creole ht Hebrew iw Hindi hi Hungarian hu Icelandic is Bahasa-Indonesia id Irish ga Italian it Japanese ja Kannada kn Korean ko Latin la Latvian lv Lithuanian lt Macedonian mk Malay ms Maltese mt Norwegian no Persian fa Polish pl Portuguese pt Romanian ro Russian ru Serbian sr Slovak sk Slovenian sl Spanish es Swahili sw Swedish sv Tamil ta Telugu te Thai th Turkish tr Ukrainian uk Urdu ur Vietnamese vi Welsh cy Yiddish yi'.split(" ");
+      for (var i = 0; i < trans_langs.length/2; i++) {
+    	  translate_lang.options[i] = new Option(trans_langs[i*2], trans_langs[i*2]); // (text,value)
+    	  }
+      </script>
+    </div>
+  </div>
+    
+
+  <div id="start_button" onclick="startButton(event);" title="Start / Pause"><img alt="Start" id="start_img" src="../images/micoff2.png"></div> 
+
+  <div id="right_buttons">
+    <button id="enlarge_button" onclick="zoom(1.25);" title="Zoom In Text        "><img alt="Enlarge" id="enlarge_img" src="../images/zoomin.png"></button>  
+    <button id="shrink_button" onclick="zoom(0.8);" title="Zoom Out Text"><img alt="shrink" id="shrink_img" src="../images/zoomout.png"></button>
+    <button id="new_button" onclick="newButton(event);" title="New Session"><img alt="New" id="new_img" src="../images/new.png"></button>
+    <button  class="menuhead" id="export_button"><img alt="Export" id="export_img" src="../images/export.png">
+      <ul class="dropdownmenu" id="export_menu">  
+        <li><div class="exportOption" id="save_txt" onclick="saveAsTxtFile();">Export to Text (.txt)</div></li> <!--N2H: WORD, PRINT, with/wo time labels... -->
+        <li><div class="exportOption" id="save_srt" onclick="saveAsSrtFile();">Export to Captions (.srt)</div></li> 
+        <li><div class="exportOption" id="export2google_translate" onclick="export2googleTranslate();">Export to Google Translate      </div></li>
+      </ul>
+    </button>
+    <button id="email_button" onclick="emailButton(event);" title="Email"><img alt="Email" id="email_img" src="../images/email.png"></button>
+    <button id="save_button" onclick="saveButton(event);" title="Save to Local Disk"><img alt="Save" id="save_img" src="../images/save.png"></button>
+    
+    <button  class="menuhead" id="open_button"><img alt="Open" id="open_img" src="../images/open.png">
+      <ul class="dropdownmenu" id="select_session">
+        <li>
+          <a id="open_file" onclick="openFile();">Open file from disk</a>
+          <input type="file" id="selected_file">
+          <output id="list" style="visibility: hidden"></output>
+        </li>
+        <div id="sessions_menu"></div>
+      </ul>
+      <script>
+        var sessionsList=localStorage.getItem("sessionsList").split(",");
+        var shownTitle="";
+        var maxChars=25;      
+        sessionsDropdown();
+        function sessionsDropdown(){ 
+          sessions_menu.innerHTML='';
+          sessionsList=localStorage.getItem("sessionsList").split(",");
+          for (var i = sessionsList.length-2; i>=0 ; i--) {
+              shownTitle=localStorage.getItem("session_title_"+sessionsList[i]);
+              if (shownTitle.length>maxChars) { shownTitle=shownTitle.substring(0,maxChars)+'...'; }
+              sessions_menu.innerHTML+='<li><div class="sessionOption" onclick="loadSession('+sessionsList[i]+')">'+shownTitle+'</div><div class="smallTrash optionIcon" onclick="deleteSession('+sessionsList[i]+');"><img alt="Delete" src="../images/trash.png"></div></li>';
+          }
+        }
+      </script>    
+    </button>
+  </div>
+  </div>
+  
+ <div id="output_box">
+  <div id="boxes_container">
+    <div class="box widebox" id="results_box">
+      <button class="select_results_button" onclick="selectContent('results');"><img alt="Select All" id="change_view_img" src="../images/select_all.png"></button>          
+    </div>
+    <div class="box rightbox narrowbox" id="translations_box" style="display:none">
+      <button class="select_results_button" onclick="selectContent('translations');"><img alt="Select All" id="change_view_img" src="../images/select_all.png"></button>
+      <a id="google_translate_attribution" href="http://translate.google.com" target="_blank"></a> <!-- TODO: icon,...google rules...  -->
+      <div id="credit_panel"><span>Credit: </span><span id="credit_show"></span>&nbsp<button id="refill" onclick='$("#translation_key_activity").fadeIn(500);'>Refill</button></div> 
+    </div>
+  </div>
+  <div id="output_panel">
+    <div class="resultsClass widebox" id="results">
+      <span class="final" id="final_span"></span> <span class="interim" id="interim_span"></span>
+    </div>
+    <div class="resultsClass rightbox narrowbox" id="translations" style="display:none">
+      <span class="final" id="final_translation"></span>
+    </div>
+  </div>
+ </div>
+  
+</div>
+
+  <div class="banner-container ad">
+    <div class="banner-left">
+      <a href="http://www.anrdoezrs.net/click-7665300-10436002" target="_top">
+      <img src="https://www.ftjcfx.com/image-7665300-10436002" width="468" height="60" alt="Australia & New Zealand - Nuance DNS 11 Home" border="0"/></a>
+    </div>
+    <div class="banner-right">
+      <a href="http://www.tkqlhce.com/click-7665300-10586063" target="_top">
+      <img src="https://www.awltovhc.com/image-7665300-10586063" width="468" height="60" alt="Dragon Dictate for Mac " border="0"/></a>
+    </div>    
+  </div>
+
+
+
+<p id="about" class="general-text"></p>
+
+<div id="show_case"> 
+  <p id="show_case_title"></p>
+    <div>
+      <h3 id="first_title">Phone captions for the deaf and hearing impaired</h3>
+      <p id="first_text">Connect the audio output from your phone to your computer, run speechlogger and turn your screen into an awesome caption-phone! It is completely automatic and free, with no human-typist hearing your conversations. The grandparents find it hard to hear family and friends over the phone? Turn on speechlogger for them and no one will have to yell over the phone again. It can also be helpful in face to face interactions.</p>
+    </div>    
+    <div>
+      <h3 id="second_title">Automatic transcription</h3>
+      <p id="second_text">Recorded an interview? You do not have to spend hours transcribing it. Play the recorded interview into your computer's microphone (or line-in) and let speechlogger transcribe it. Speechlogger will save the transcribed text along with the date, time and your comments. It also lets you edit the text. You can transcribe all your phone conversations using the same method.</p>
+    </div>    
+    <div>
+      <h3 id="third_title">Automatic Interpreter and translator</h3>
+      <p id="third_text">Meeting with foreign guests? Bring a laptop (or two) with speechlogger and a microphone. Each side will see real-time translation. It works in languages you didn't even know existed! Need to make a phone call in a foreign language and you want to make sure you fully understand the other side? Connect your phone's audio output to your computer's line-in.</p>
+    </div>    
+    <div>
+      <h3 id="fourth_title">Learn foreign languages ​​and correct pronunciation</h3>
+      <p id="fourth_text">Speechlogger is a great tool for learning languages. It can be used ​​in several ways. You can use it to learn vocabulary. Say a word or phrase in your native language and speechlogger will translate it. You can learn and practice correct pronunciation. Say a word until speechlogger understands you and shows it in black font. Speechlogger understood you? Good job - you have pronounced it correctly!</p>
+    </div>    
+    <div>
+      <h3 id="fifth_title">Subtitles for movies</h3>
+      <p id="fifth_text">Well, it's pretty obvious right? Instead of manually transcribing the whole movie, speechlogger will do it for you. Of course you can then take the file and automatically translate it into any language to produce international subtitles.</p>
+    </div>
+    <div>
+      <h3 id="sixth_title">Dictate instead of typing</h3>
+      <p id="sixth_text">Writing emails? Papers? Running thoughts? Summaries? Whatever it is you need to type, try dictating it to speechlogger instead.</p>
+    </div>
+    <div>
+      <h3 id="seventh_title">Fun game :)</h3>
+      <p id="seventh_text">Can you imitate a Chinese speaker? French? What about Russian? Try to imitate a foreign language and see what you just said with speechlogger. Use speechlogger's simultaneous translation to your language to understand what you just said. Get surprising results - it's a lot of fun!</p>
+    </div>
+</div>
+
+<div class="general-text">
+  <h2 id="help_steps_title">New to Speechlogger? Follow the Following Steps:</h2>
+  <p id="help_steps_content">1) Connect a mic to your computer. Check that the mic is connected and working properly.<br>2) Open Chrome on desktop or laptop. Go to this address: http://speechlogger.appspot.com <br>3) Choose language to dictate <br>4) [Optional:] Click "Auto-punctuation" and set it up <br>5) Click the large middle mic icon in the app. <br>6) [For the first time only:] Once you click on the mic, the browser will ask for your permission to listen to your mic. Chrome will show you the question in a line underneath the addressbar. Click "Allow". If the line did not pop look for a small camera-icon in the address bar itself. This is done to protect your security. <br>7) Start talking. The transcribed text will show on the screen. <br></p>
+
+<div class="ad_728x15 ad">  
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_728x15 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:15px"
+     data-ad-client="ca-pub-5030295218223297"
+     data-ad-slot="7042827607"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+  
+  <a name="transcribe-audio-files"></a>
+  <h2 id="audio_file_title">Transcribe an Audio File </h2>
+  <p id="audio_file_content">Two possible solutions to transcribe the audio file: <br>a) Simple solution if possible: play it with an external device into your computer using a line-in cable.<br>b) Better solution: Install a "virtual line-in cable" as described in this <a target="_blank" href="https://www.youtube.com/watch?v=CleLvQWy8-c">youtube</a>. <br>The software we use (not affiliated with us) is VoiceMeeter: <a target="_blank" href="http://vb-audio.pagesperso-orange.fr/Voicemeeter/index.htm">http://vb-audio.pagesperso-orange.fr/Voicemeeter/index.htm</a> <br>Downloadable from: <a target="_blank" href="http://vbaudio.jcedeveloppement.com/Download_CABLE/VoicemeeterSetup_v1025.zip">http://vbaudio.jcedeveloppement.com/Download_CABLE/VoicemeeterSetup_v1025.zip</a> <br>1) After you've installed it, go to your computer's playback devices (<a target="_blank" href="https://www.youtube.com/watch?v=PyzbBkMtj_o">how?</a>) and choose "VoiceMeeter Input" to be your default <b>playback</b> device. <br>2) Open VoiceMeeter and play some audio file or youtube just to make sure you hear it well. <br>3) Refresh Speechlogger (by pressing F5) and click on the app's mic to start it. <br>4) As it is running, go to Chrome's address bar. There, click on the small camera icon. <br>5) Choose "VoiceMeeter Output" as your mic (and make sure speechlogger is always allowed). <br>6) Refresh the page (press F5) <br>7) Click the app's mic to start it and play your audio file. The results will show on the screen. <br>8) Optional: export to captions with timestamps (.srt format). <br>     </p>
+</div>
+
+<div class="ad_970x90 ad">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ad_970x90 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:970px;height:90px"
+     data-ad-client="ca-pub-5030295218223297"
+     data-ad-slot="1775023206"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div id="footer">
+  <div id="footer_menu">
+    <a target="_blank" href="https://speechlogger.appspot.com/en/speechnotes.jsp">SpeechNotes</a>
+    <a id="contact_us" href="mailto:admin@speechlogger.com" target="_blank">Contact Us</a> <!-- TODO: change email -->
+    <a id="terms_button" href="javascript:alertNotification('<b>DISCLAIMER:</b> THIS SERVICE MAY CONTAIN TRANSLATIONS AND TRANSCRIPTIONS POWERED BY GOOGLE. GOOGLE AND WE DISCLAIM ALL WARRANTIES RELATED TO THE TRANSLATIONS AND TRANSCRIPTIONS, EXPRESS OR IMPLIED, INCLUDING ANY WARRANTIES OF ACCURACY, RELIABILITY, AND ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       ','DISCLAIMER & TERMS')">DISCLAIMER & TERMS</a>
+    <a target="_blank" href="http://speechlogger.com/">Documentation & Discussions</a>
+    <a target="_blank" href="http://speechlogger.com/forum/">Forum</a>
+    <a target="_blank" href="http://speechlogger.com/blog1/">Blog</a> 
+    <br>
+    <div id="languageLinks">
+      <b><a>Interface Languages:</a></b>
+      <a href="../en/">English</a>
+      <a href="../es/">español</a>
+      <a href="../fr/">français</a>
+      <a href="../de/">Deutsch</a>
+      <a href="../ru/">России</a>
+      <a href="../ja/">日本の</a>
+      <a href="../zh/">中國</a>
+      <a href="../ro/">română</a>
+      <a href="../he/">עברית</a>
+    </div>
+  </div>
+</div>
+
+<div style="display:none" id="temporary_html"></div>
+
+<script>
+    function updateTagList(position){
+      $("#user_input_tags_"+position).val("");
+      var tempStr="";
+      var tempMark=punctMarks[punctuation_mark.value];
+      var tempArray=tempMark[position]; //this array contains the sequences we need to display
+      for (var i=0; i<tempArray.length;i++){
+        tempStr+='<div class="inlineTag"><p>'+tempArray[i]+'</p><span class="inlinetrash" onclick="removePunctSequence(punctMarks[punctuation_mark.value]['+"'"+position+"']["+i+"],'"+punctuation_mark.value+"','"+position+"'"+');">x</span></div>';//TODO: replace "R" with trash image. 
+      }
+      $("#display_"+position+"_tags").html(tempStr);
+    }
+</script>
+
+<script>
+  function keypressHandler(e) {
+    if(e.which == 13) {  //If 'Enter' pressed
+      $('.OkButton').focus().click(); 
+    }
+  }
+  $('.activityContainer').keypress(keypressHandler);
+</script>
+
+<script> //Assign strings (from the index file) to the HTML layout
+  session_title.innerHTML=sessionTitle + localStorage.sessionIndex + ", " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' + newDate.getFullYear(); 
+
+  if (localStorage.getItem("style")==="full") {
+      view_option.innerHTML='Back to Regular View';
+      $('#change_view_button').attr('title','Back to Regular View');
+      $('#change_view_img').attr("src", '../images/regularView.png');            
+   } else {
+      view_option.innerHTML='Full Screen View';
+      $('#change_view_button').attr('title','Full Screen View');      
+   }
+  
+</script>
+
+<!-- I don't know what these do... 
+  <script src="https://www.google.com//www.google.com/intl/en/chrome/assets/common/js/chrome.min.js"></script> 
+  <script>
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+  </script>
+-->
+
+	
+
+<script>
+credit_show.innerHTML = "<b>"+localStorage.getItem("currentCredit")+"</b>";
+credit_show2.innerHTML = "<b>"+localStorage.getItem("currentCredit")+"</b>";
+
+function bindEsc() {
+	$(document).unbind('keyup');
+	$(document).keyup(function(e) {
+    if (e.keyCode == 27) { $('.activityContainer').hide(); unbindEsc(); }   // esc
+  });	
+}
+
+function unbindEsc() {
+	if (localStorage.getItem("style")==="full") {
+    $(document).keyup(function(e) {
+	    if (e.keyCode == 27) { changeStyle(); }   // esc
+	  });   
+	}
+}
+
+//TODO: Default color.. Select buttons for each side...; Replace mic gif; Real Graphics (buttons, images, logo); Analytics; input for google API key translations;  Real text copyright; change: Aleeze understands you... ; Change domain if necessary... ; select languages relate...; choose languages; questions for supported languages;
+  if (localStorage.getItem("style")==="full") {
+      $(document).keyup(function(e) {
+         if (e.keyCode == 27) { changeStyle(); }   // esc
+      });   
+  }
+
+if ('SpeechSynthesisUtterance' in window) {
+     var u = new SpeechSynthesisUtterance();
+     u.lang = 'en-US';
+     u.rate = 1.2;
+     u.text = 'speech_utterance_ended_111';
+     u.onend = function() { u.text = 'speech_utterance_ended_111'; };
+}
+
+var currentSession= new Session();
+var trans_lang="";  //Will be set when updateTranslateLang(), which happens right when the page loads and again when pressed start...
+var timeBox="";
+var RTL_languages = ["he", "iw", "ar"];
+
+var saveToIndex=localStorage.sessionIndex;
+
+var variable=new Variables();
+var t_punctuation;
+var searchFlag = false;
+
+function Variables() {
+  this.savedOnce=false;
+  this.timer=0;
+  this.firstTime=true;
+  this.recognizing=false;
+  this.intentionalPause=true; //Stop recording only if user / application code which is not errors wanted to
+  this.lastwasfinal=true;
+  this.new_sentence=true;
+  this.start_timestamp = 0;
+  this.dif_final_interim = 0;
+  this.newTimestamp=0;
+  this.oldTimestamp=0;
+  this.newTimestampFinal=0;
+  this.startSubTime=0;
+  this.punctuation='.';
+  this.addLineBreaks=false;
+  this.sentence="";
+  this.firstArrival=0;
+}
+
+$("#interface_lang option[value='" + interfaceLang + "']").attr('selected', true);
+localStorage.interfaceLang=interfaceLang;
+
+function updateInterface() {
+  localStorage.interfaceLang=interface_lang.value;
+  switch(interface_lang.value)
+	{
+	case ("Hebrew"):
+    window.location.assign("../he/");    
+    break;
+	case ("English"):
+    window.location.assign("../en/");    
+    break;
+  case ("Romanian"):
+		window.location.assign("../ro/");    
+		break;
+	default:
+		window.location.assign("../"+ interface_lang.value + "/");
+	}
+}
+
+//Load previous lang if exists.. If it doesn't assign interfaceLang to it. Update the language selector.
+if (localStorage.getItem("selected_language")===null) { 
+  localStorage.selected_language = $('#interface_lang :selected').text();
+  localStorage.selected_translation = defaultTrans; //Safe to assume that if lang wasn't set, also translation wasn't.
+}
+$("#select_language option[value='" + localStorage.selected_language + "']").attr('selected', true);
+punct_act_language.innerHTML=select_language.value;
+ 
+//Make sure wanted translation exists and isn't the same language
+if (localStorage.getItem("selected_translation")===null || localStorage.selected_translation===localStorage.selected_language) {
+  if (localStorage.selected_language===interfaceLang) { localStorage.selected_translation = defaultTrans; }
+  else { localStorage.selected_translation = interfaceLang; }
+} //else then everything is good: selected_translation already exists and is different than language...
+//Update translation selector:
+$("#translate_lang option[value='" + localStorage.selected_translation + "']").attr('selected', true);
+$("#translate_lang option[value='" + select_language.value + "']").attr('disabled', 'disabled').siblings().removeAttr('disabled');
+updateTranslateLang();
+for (var i = select_dialect.options.length - 1; i >= 0; i--) {
+  select_dialect.remove(i);
+}
+var dlist = langs[select_language.selectedIndex];
+for (var i = 2; i < dlist.length; i++) {
+  select_dialect.options.add(new Option(dlist[i][1], dlist[i][0]));
+}
+select_dialect.style.visibility = dlist[2].length === 1 ? 'hidden' : 'visible';
+if (localStorage.getItem("selected_dialect_index")===null || parseFloat(localStorage.selected_dialect_index)>=dlist.length){localStorage.selected_dialect_index="0";}
+select_dialect.selectedIndex = localStorage.selected_dialect_index;
+
+//Language Parameters
+var time_to_period = 1000;
+var time_to_newline = 3000;
+var time_to_2lines = 10000;
+var punctMarks = new PunctMarks();
+var source_lang=dlist[1]; //Will be set when the page loads and again when pressed start
+
+updateTagList('start');
+updateTagList('end');
+updateTagList('any');
+
+function updateCountry() {
+  pauseRecognition(); //Builtin Save if needed
+  if (select_language.value===localStorage.selected_translation) { //Swap
+    if (trans_langs.indexOf(localStorage.selected_language) !== -1 ) { $("#translate_lang option[value='" + localStorage.selected_language + "']").attr('selected', true); }
+    else { $("#translate_lang option[value='" + 'English' + "']").attr('selected', true); }
+    updateTranslateLang();
+  }
+  localStorage.selected_language=select_language.value;  
+  if (trans_langs.indexOf(select_language.value) !== -1 ) {  
+    $("#translate_lang option[value='" + select_language.value + "']").attr('disabled', 'disabled').siblings().removeAttr('disabled');//TODO: Make sure both selects have same names & values...
+  } else { $("#translate_lang option[value='" + 'English' + "']").removeAttr('disabled').siblings().removeAttr('disabled'); } //TODO: Make sure both selects have same names & values... 
+  for (var i = select_dialect.options.length - 1; i >= 0; i--) {
+    select_dialect.remove(i);
+  }
+  var list = langs[select_language.selectedIndex];
+  for (var i = 2; i < list.length; i++) {
+    select_dialect.options.add(new Option(list[i][1], list[i][0]));
+  }
+  select_dialect.style.visibility = list[2].length === 1 ? 'hidden' : 'visible';
+  localStorage.selected_dialect_index=select_dialect.selectedIndex;
+	
+  //Update language Parameters
+  source_lang = list[1];
+  time_to_period = 1000;
+  time_to_newline = 3000;
+  time_to_2lines = 10000;
+  punctMarks = new PunctMarks;
+  updateTagList('start');
+  updateTagList('end');
+  updateTagList('any');
+  punct_act_language.innerHTML=select_language.value;
+}
+
+function updateDialect() {
+  localStorage.selected_dialect_index=select_dialect.selectedIndex;
+}
+
+function updateTranslateLang() { 
+	localStorage.selected_translation=translate_lang.value; //Given that wrong lang is impossible cause disabled...  
+	trans_lang=trans_langs[trans_langs.indexOf(translate_lang.value)+1];//A faster way...
+}
+
+function addTranslationKey(key){
+	localStorage.setItem("translationKey",key);
+}
+
+$(".final").on("mouseenter",".results_anchor",function () {
+    var str=this.id;
+    var idNumber=str.split('_')[1];
+    $("#trans_"+ idNumber).addClass("highlight");
+    $("#results_" + idNumber).addClass("highlight");
+});
+
+$(".final").on("mouseleave",".results_anchor",function () {
+    var str=this.id;
+    var idNumber=str.split('_')[1];
+    $("#trans_"+ idNumber).removeClass("highlight");
+    $("#results_" + idNumber).removeClass("highlight");
+});
+
+$(".final").on("click",".results_anchor",function () {
+    $(this).attr("contenteditable",true);
+    $(this).siblings(".timeDisplay" ).removeClass("timeDisplay");
+    $(this).removeClass("highlight");
+    $(this).focus();
+});
+
+$(".final").on('blur',".results_anchor",function () {
+    $(this).attr("contenteditable",false);
+    switch (localStorage.displayTimeFlag)
+    {
+    case ("real"):
+    	$(this ).siblings(".realTimeDisplay").addClass("timeDisplay");//show();
+      break;
+    case ("dif"):
+      $(this ).siblings(".difTimeDisplay").addClass("timeDisplay");//show(); 
+      break;   
+    }  
+});
+
+$('#output_panel').on('focus', '.results_anchor', function() {
+  	var str=this.id;
+    var idNumber=str.split('_')[1];
+    var $this = $(this);
+    $this.data('before', $this[0].childNodes[0].data);
+    return $this;
+}).on('blur', '.results_anchor', function() {
+  	var $this = $(this);
+    if (typeof $this[0].childNodes[0]== "undefined") { $this[0].innerHTML="..."; }
+  	if ($this.data('before') !== $this[0].childNodes[0].data) {
+    	updateInstanceByID(this.id.split('_')[0], this.id.split('_')[1],$this[0].childNodes[0].data);
+    	localSave();
+    }
+    return $this;
+});
+
+function updateInstanceByID(type,id,newText) {
+	var length=currentSession.transcript.length;
+	var i=Math.floor(length/2);
+	var low=0;
+	var high=length-1;
+	var idNum=parseInt(id);
+	var counter=0;
+	while (idNum!=currentSession.transcript[i].id && counter<length*2) {
+		counter++;
+		if ( idNum < currentSession.transcript[i].id ) { //i.e. i is too big, shrink it
+			high=i-1; //clearly,it cannot be higher than that, cause i is too big. 
+			i=Math.floor(i-(i-low)/2);
+			if (i<low) i=low;
+		} else {                                      //i.e. i is too small, enlarge
+			low=i+1; //set lower boundry
+			i=Math.floor(i+(high+1-i)/2);
+			if (i>high) i=high;
+		}
+	}
+	if (idNum!=currentSession.transcript[i].id) return;
+	switch (type) {
+	case 'results':
+		currentSession.transcript[i].textContent=newText;
+		break;
+	case 'trans':
+		currentSession.transcript[i].translatedContent=newText;
+		break;
+	}
+	return;
+}
+
+function changeColor(color) {  
+  switch (color) {
+  case 'custom':
+	  color=favcolor.value;
+	  break;
+  case 'blue':
+	  color="#97d1fd";
+	  break;
+  case 'green':
+	    color="#aae89d";
+	    break;
+  case 'red':
+	    color="#f1a5bc";
+	    break;
+  case 'yellow':
+      color="#ebf475";
+      break;      
+  case 'gray':
+	    color="#dadada";
+	    break;	    
+  }
+  $("#application").css( "background-color", color);
+  localStorage.favColor=color;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+// User Preferences and their defaults, if for the first time on page, or were deleted
+if (localStorage.getItem("favColor")===null){localStorage.favColor="#97d1fd";}
+  $("#favcolor").attr('value', localStorage.favColor);
+  $("#application").css( "background-color", localStorage.favColor);     
+if (localStorage.getItem("sessionsList")===null){localStorage.sessionsList="";}
+if (localStorage.getItem("autoPunctuation")===null){localStorage.autoPunctuation="false";}
+  $('#punctuation_checkbox').prop('checked',(localStorage.autoPunctuation==="true"));
+if (localStorage.getItem("translation")===null){localStorage.translation="false";}
+  $('#translate_checkbox').prop('checked',(localStorage.translation==="true"));
+  if (localStorage.getItem("translation")==="true") {  
+    $("#translate_options").show();
+    $("#translations").show();
+    $("#translations_box").show();        
+    $("#results").addClass("narrowbox", 0).removeClass("widebox").addClass("leftbox", 0);
+    $("#results_box").addClass("narrowbox", 0).removeClass("widebox").addClass("leftbox", 0); 
+  }
+if (localStorage.getItem("readOut")===null){localStorage.readOut="false";}
+  $('#read_checkbox').prop('checked',(localStorage.readOut==="true")); //Check or uncheck according to the locally-stored flag
+if (localStorage.getItem("highlightUncertain")===null){localStorage.highlightUncertain="true";}
+  $('#uncertain_checkbox').prop('checked',(localStorage.highlightUncertain==="true")); //Check or uncheck according to the locally-stored flag
+if (localStorage.getItem("autoSave")===null){localStorage.autoSave="true";} 
+  $('#save_checkbox').prop('checked',(localStorage.autoSave==="true")); //Check or uncheck according to the locally-stored flag
+if (localStorage.getItem("threshhold_confidence")===null){localStorage.threshhold_confidence="0.85";} 
+if (localStorage.getItem("max_suggestions")===null){localStorage.max_suggestions="3";}
+if (localStorage.getItem("displayTimeFlag")===null){localStorage.displayTimeFlag="real";} 
+$("#select_timeDisplay option[value='" + localStorage.displayTimeFlag + "']").attr('selected', true); 
+updateTime();
+if (localStorage.getItem("zoom")===null){localStorage.zoom="1";}
+zoom(parseFloat(localStorage.zoom));
+localStorage.zoom=Math.sqrt(parseFloat(localStorage.zoom)); //Cause it was just multiplied by itself in zoom()
+
+function updateTime() { //controls what time labels to display
+  localStorage.displayTimeFlag=select_timeDisplay.value;
+  switch (localStorage.displayTimeFlag)
+  {
+  case ("real"):
+    $(".realTimeDisplay").addClass("timeDisplay");//show();
+    $(".difTimeDisplay").removeClass("timeDisplay");//hide();
+    break;
+  case ("dif"):
+    $(".realTimeDisplay").removeClass("timeDisplay");//hide();
+    $(".difTimeDisplay").addClass("timeDisplay");//show(); 
+    break;
+  default:
+    $(".realTimeDisplay").removeClass("timeDisplay");//hide();
+    $(".difTimeDisplay").removeClass("timeDisplay");//hide();    	
+  }  
+}
+
+// Button-function definitions, "onclick()"
+
+//***  Newly proposed function when translation activated.  ***
+$("#translate_checkbox").on('click',function(){ 
+	  localStorage.setItem("translation",translate_checkbox.checked);
+	  if (localStorage.getItem("translation")==="true") {
+	    /*if (localStorage.getItem("everPaid")!=="true")*/ $("#translation_key_activity").fadeIn(500);
+	    //else if (localStorage.getItem("translationKey").length<5) $("#translation_key_activity").fadeIn(500);
+	    $("#translate_options").show();
+	    $("#translations").fadeIn(1000);
+	    $("#translations_box").fadeIn(1000);        
+	    $("#results").addClass("narrowbox", 0).addClass("leftbox", 200).removeClass("widebox",500);
+	    $("#results_box").addClass("narrowbox", 0).addClass("leftbox", 200).removeClass("widebox",500);    
+	  } else {
+	    $("#translate_options").hide();    
+	    $("#translations").fadeOut(1000);
+	    $("#translations_box").fadeOut(1000);        
+	    $("#results").addClass("widebox", 500).removeClass("narrowbox").removeClass("leftbox", 200);
+	    $("#results_box").addClass("widebox", 500).removeClass("narrowbox").removeClass("leftbox", 200);    
+	  }
+});
+
+$("#save_checkbox").on('click',function(){ 
+  localStorage.autoSave=save_checkbox.checked;
+  //TODO: notify that all will be saved automatically when new words are spoken...
+});
+
+$("#punctuation_checkbox").on('click',function(){ 
+  localStorage.autoPunctuation=punctuation_checkbox.checked;
+  if (localStorage.getItem("autoPunctuation")=='true') {
+	  $('#punctuation_activity').fadeIn(500);bindEsc();
+  }
+});
+
+$("#uncertain_checkbox").on('click',function(){ 
+  localStorage.highlightUncertain=uncertain_checkbox.checked; 
+  if (uncertain_checkbox.checked) { $('.uncertain').addClass('red_font'); }
+  else { $('.uncertain').removeClass('red_font'); }
+});
+
+$("#read_checkbox").on('click',function(){ 
+  if (read_checkbox.checked) { 
+    if (!('SpeechSynthesisUtterance' in window)) {
+      alertNotification('<a target="_blank" href="chrome://flags/#enable-experimental-web-platform-features">chrome://flags/#enable-experimental-web-platform-features</a>');
+      $('#read_checkbox').prop('checked',false);
+    } else {
+      alertNotification('Experimental, works only if you translate to English'); //TODO: string resources...              
+    }
+  }
+  localStorage.readOut=read_checkbox.checked; //TODO: if webkit not installed... Works only for English... Experimental... Volume prefer with preview 'How do you like that volume?'
+});
+
+function zoom(multi){  
+  localStorage.zoom=parseFloat(localStorage.zoom)*multi;  
+  var fontSize = parseInt($("#results").css("font-size"));
+  var lineHeight = parseInt($("#results").css("line-height"));
+  fontSize = multi*fontSize + "px";
+  lineHeight = multi*lineHeight + "px";
+  $("#results").css({'font-size':fontSize});
+  $("#results").css({'line-height':lineHeight});
+  $("#translations").css({'font-size':fontSize});
+  $("#translations").css({'line-height':lineHeight});
+}
+
+function newButton(){  
+  pauseRecognition(); //Builtin Save if needed
+  currentSession=new Session();
+  //reset all parameters to initial values. TODO: make sure all parameters are here and updated...
+  variable=new Variables();  //Reset page variables
+  speaker.value="";
+  saveToIndex=localStorage.sessionIndex;
+  session_title.innerHTML=sessionTitle + saveToIndex + ", " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' + newDate.getFullYear();
+  final_span.innerHTML="";
+  interim_span.innerHTML="";
+  final_translation.innerHTML=""; 
+}
+
+function saveAsTxtFile()
+{
+  var body="";
+  if (speaker.value!=="") { body += 'Notes: ' + speaker.value + '\n-------------------\n\n';}
+  body += 'Transcript:\n-------------------\n' + final_span.innerText;
+  if (final_translation.innerHTML.length>1) {body+='\n\nTranslation\n-------------------\n'+final_translation.innerText;}
+  body+='\n\n'+ 'Speechlogger :) www.speechlogger.com';
+
+	var textToWrite = body;
+	var fileNameToSaveAs = session_title.innerText + '.txt'; //TODO: filename should be first 10chars of noweirdchrs(title)...
+	
+  textToWrite=textToWrite.replace(/\n/g,'\r\n');//Just for windows applications, they need not only newline... 
+
+	var textFileAsBlob = new Blob([textToWrite], {type:'text/plain;charset=utf-8'});
+
+	var downloadLink = document.createElement("a");
+  downloadLink.setAttribute('id','downloadLink_id');		
+	downloadLink.download = fileNameToSaveAs;
+	downloadLink.innerHTML = "Download File";
+		// Chrome allows the link to be clicked without actually adding it to the DOM.
+  downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+	downloadLink.click();
+	$('#downloadLink_id').remove();	
+}
+
+function saveAsSrtFile() { 
+  var textToWrite = currentSession.toSRT("transcript");
+  var fileNameToSaveAs = session_title.innerText + '.srt'; //TODO: filename should be first 10chars of noweirdchrs(title)...
+  var textFileAsBlob = new Blob([textToWrite], {type:'text/plain;charset=utf-8'});
+
+  var downloadLink = document.createElement("a");
+  downloadLink.setAttribute('id','downloadLink_id');	
+  downloadLink.download = fileNameToSaveAs;
+  downloadLink.innerHTML = "Download File";
+		// Chrome allows the link to be clicked without actually adding it to the DOM.
+  downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+  downloadLink.click();
+  $('#downloadLink_id').remove();
+}
+
+function export2googleTranslate() {
+  var body="";
+  var url=""; 
+  body += final_span.innerText;
+  body+='\n\n'+'Speechlogger :) www.speechlogger.com';
+  url='http://translate.google.com/#'+ source_lang + '/' + trans_lang + '/' + encodeURIComponent(body);
+  if (url.length>1800) {
+    url=url.substring(0,1800);
+    var splitUrl=url.split('%');
+    url=url.split('%',splitUrl.length-1).join('%');    
+    alertNotification("We're sorry, but the text was too long for your browser to automatically export, so we had to cut off the last part.<br>If you need the whole text, please copy it and paste it in manually.");
+  }
+  window.open(url,'_blank');
+}
+
+function copyAll() { //TODO: Do instead small buttons to select all in box... 
+
+  window.getSelection().removeAllRanges();
+  var range = document.createRange();
+  range.selectNode(document.getElementById('results'));
+  window.getSelection().addRange(range);
+
+}
+
+function selectContent(id) {
+	  window.getSelection().removeAllRanges();
+	  var range = document.createRange();
+	  range.selectNode(document.getElementById(id));
+	  window.getSelection().addRange(range);	
+}
+
+function emailButton(){ 
+  pauseRecognition(); //Builtin Save if needed
+  var body="";
+  if (speaker.value!=="") { body += 'Notes: ' + speaker.value + '\n_________________\n\n';}
+  body += 'Transcript:\n_________________\n' + final_span.innerText;
+  if (final_translation.innerHTML.length>1) {body+='\n\nTranslation\n_________________\n'+final_translation.innerText;}
+  body+='\n\n' + 'Speechlogger :) www.speechlogger.com';
+  var url='mailto:?subject=' + encodeURI(session_title.innerText) + '&body=' + encodeURIComponent(body);
+  if (url.length>1200) {
+    url=url.substring(0,1200);
+    var splitUrl=url.split('%');
+    url=url.split('%',splitUrl.length-1).join('%');
+    alertNotification("We're sorry, but the text was too long for your browser to automatically export, so we had to cut off the last part.<br>If you need the whole text, please copy it and paste it in manually.");  
+  }
+  window.open(url,'_blank'); // <- This is what makes it open in a new window.
+}
+
+function saveButton () {
+  localSave();
+  toastNotification("Session saved on your browser, and also sent to be saved on disk. <br><br>To load go to the open-button. <br><br>You don't need to bother saving if Auto-Save is checked, unless you want it saved on disk outside your browser.");
+  currentSession.session_title=session_title.innerText; //TODO: put right UI, make corrections...
+  currentSession.timer=variable.timer;
+  currentSession.notes=speaker.value;
+
+  var fileNameToSaveAs = session_title.innerText + '.tst'; //TODO: filename should be first 10chars of noweirdchrs(title)...
+  var json = JSON.stringify(currentSession);
+  var textFileAsBlob = new Blob([json], {type:'text/plain;charset=utf-8'});
+
+  var downloadLink = document.createElement("a");
+  downloadLink.setAttribute('id','downloadLink_id');	
+  downloadLink.download = fileNameToSaveAs;
+  downloadLink.innerHTML = "Download File";
+		// Chrome allows the link to be clicked without actually adding it to the DOM.
+  downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+  downloadLink.click();
+  $('#downloadLink_id').remove();	
+}
+
+function openFile() { //ToDO: decide - do I need it??
+}
+
+function handleFileSelect() { //TODO: allow only .tst files...
+    var files = document.getElementById('selected_file').files;
+    if (!files.length) {
+      alert('Please select a file!');
+      return;
+    }
+    var file=files[0];
+    var reader = new FileReader();
+    reader.onloadend = function(evt) {
+      if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+        var json = evt.target.result;
+        loadSession(json);
+      }
+    }
+    var blob = file;
+    reader.readAsText(blob);              
+ }
+document.getElementById('selected_file').addEventListener('change', handleFileSelect, false);
+
+//////////////////////////////////////////////////////////////////
+
+if (!('webkitSpeechRecognition' in window)) {
+  upgrade();
+} else {
+  start_button.style.display = 'inline-block';
+  var recognition = new webkitSpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  recognition.onstart = function() {
+    variable.recognizing = true;
+    if (searchFlag) { //i.e. voice search wanted
+    	search_img.src = '../images/searchon.gif';
+    } else {
+    	start_img.src = '../images/micon2.gif';
+    }
+  };
+
+  recognition.onend = function() {
+	  if (searchFlag) { //i.e. voice search wanted
+	    search_img.src = '../images/searchoff.png';
+	    variable.recognizing=false;
+	    variable.intentionalPause=true; //It will be set to false when start is pressed.     
+		  return true;  //i.e. succeeded stopped
+	  } else {
+	    if(variable.intentionalPause===false){
+	    	console.log('Ended unintentionally');
+			  recognition.start();
+			  return false; //i.e. didn't stop
+  	  } else {
+  		  start_img.src = '../images/micoff2.png';
+  		  interim_span.innerHTML="";
+  		  variable.recognizing=false;
+  		  variable.intentionalPause=true; //It will be set to false when start is pressed.     
+  		  return true; //i.e. succeeded stopped
+  		}
+	  }
+  };
+  
+  recognition.onspeechstart = function() {}; //Optional functions...  
+
+  recognition.onspeechend = function() {};
+
+  recognition.onnomatch = function(event) {
+	  console.log('No match');
+  };
+
+  recognition.onerror = function(event) {
+	  console.log('Error recognizing');
+	  recognition.stop(); //TODO: verify if necessary...	  
+	};
+
+  recognition.onresult = function(event) {
+	 if (searchFlag) { //i.e. fill in search box...
+		    for (var i = event.resultIndex; i < event.results.length; ++i) {
+		        if (event.results[i].isFinal) {
+		        	$('#gsc-i-id1').val($('#gsc-i-id1').val() + ' ' + (event.results[i][0].transcript));
+		        }
+		    }		 
+		    
+	 } else {
+    //console.log('new result');
+    window.clearTimeout(t_punctuation);
+    variable.oldTimestamp=variable.newTimestamp;    //Old is what was the previous new... The new is the event timestamp
+    if (variable.newTimestamp===0) { variable.oldTimestamp=variable.start_timestamp; }
+    variable.newTimestamp=event.timeStamp;   //Old is what was the previous new... The new is the event timestamp
+    var interim_transcript = '';
+    var temporary_string='';
+    var alt_suggestions = '';
+    if (variable.lastwasfinal) {
+      variable.startSubTime=Math.max(variable.start_timestamp,variable.newTimestampFinal,variable.newTimestamp-event.results[event.resultIndex][0].transcript.length*100-500); //In order to deal also with the first result in session
+    }
+
+    var currentTime = new Date();
+    variable.dif_final_interim=variable.newTimestamp-variable.oldTimestamp;
+    
+    if (typeof(event.results) === 'undefined') {
+      recognition.onend = null;
+      variable.intentionalPause=true;      
+      recognition.stop();
+      upgrade();
+      return;
+    }
+
+    //Add lines before new results.
+    if (variable.addLineBreaks) {
+      variable.addLineBreaks=false;
+      final_span.innerHTML+='<br><br>';
+      final_translation.innerHTML+='<br><br>';
+    } else {
+      if (variable.new_sentence && localStorage.autoPunctuation) {
+    	  if ((variable.newTimestamp-variable.oldTimestamp)>=time_to_2lines) {
+          final_span.innerHTML+='<br><br>';
+          final_translation.innerHTML+='<br><br>';
+    	  } else {
+          if ((variable.newTimestamp-variable.oldTimestamp)>=time_to_newline) {
+            final_span.innerHTML+='<br>';
+            final_translation.innerHTML+='<br>';
+          }
+    	  }
+      }
+    }
+
+    for (var i = event.resultIndex; i < event.results.length; ++i) {
+      
+      if (event.results[i].isFinal) {
+        variable.newTimestampFinal=event.timeStamp; 
+     	
+          if (variable.new_sentence) { //New sentence just began...
+        	  temporary_string=capitalize(event.results[i][0].transcript);
+        	  variable.sentence=event.results[i][0].transcript;
+        	} else { 					//Not new sentence
+        	  temporary_string=event.results[i][0].transcript;
+        	  variable.sentence+=event.results[i][0].transcript;
+        	} 
+        
+        var textInstance= new TextInstance();
+        textInstance.textContent=temporary_string;
+        textInstance.timeStamp=event.timeStamp;
+        textInstance.timerStart=variable.startSubTime-variable.start_timestamp+variable.timer;
+        textInstance.timerEnd=event.timeStamp-variable.start_timestamp+variable.timer;
+        textInstance.confidence=event.results[i][0].confidence;
+        textInstance.id=event.timeStamp;
+        textInstance.lang=source_lang;
+        textInstance.targetLang=trans_lang;
+                
+        timeBox='<div class="realTimeDisplay">' + addZero(currentTime.getHours()) + ':' + addZero(currentTime.getMinutes()) + ':' + addZero(currentTime.getSeconds()) + '</div>' +
+                '<div class="difTimeDisplay">' + addZero(Math.floor(textInstance.timerEnd/3600000)) + ':' + addZero(Math.floor((textInstance.timerEnd%3600000)/60000)) + ':' + addZero(Math.floor((textInstance.timerEnd%60000)/1000)) + '</div>'; 
+
+        currentSession.transcript.push(textInstance);
+        final_span.innerHTML += ' &nbsp ' + textInstance.toHTML(parseFloat(localStorage.threshhold_confidence))[0];
+        
+        if (variable.firstTime) {
+          variable.firstTime=false;
+          localStorage.sessionIndex=parseFloat(localStorage.sessionIndex)+1;//So that next time it will advance...
+        }
+        variable.new_sentence=false;
+        
+        // This event is final, so if last event wasn't, and a while passed it's time to close the sentence.
+        if (variable.lastwasfinal==false && (event.timeStamp-variable.oldTimestamp)>time_to_period){
+          if(localStorage.autoPunctuation==="true") {
+                setPunctuation(variable.sentence);
+                  $("#results_" + textInstance.timeStamp).html($("#results_" + textInstance.timeStamp).html() + variable.punctuation + ' ');
+                  textInstance.textContent += variable.punctuation + ' ';
+                  if(textInstance.translatedContent!=="") {
+                    $("#trans_" + textInstance.timeStamp).html($("#trans_" + textInstance.timeStamp).html() + variable.punctuation + ' ');
+                    textInstance.translatedContent += variable.punctuation + ' ';
+                  }
+                  variable.new_sentence=true;
+          }
+          if (localStorage.autoSave==="true") { localSave(); }
+          variable.sentence="";        	
+        }
+        
+        t_punctuation=setTimeout(function(){ //Punctuate & save at the end of sentence.
+      	  if(localStorage.autoPunctuation==="true" && variable.sentence!=="") {
+      	 	setPunctuation(variable.sentence);
+      	    $("#results_" + textInstance.timeStamp).html($("#results_" + textInstance.timeStamp).html() + variable.punctuation + ' ');
+            textInstance.textContent += variable.punctuation + ' ';
+            temporary_string += variable.punctuation + ' ';
+       	    if(textInstance.translatedContent!=="") {
+              $("#trans_" + textInstance.timeStamp).html($("#trans_" + textInstance.timeStamp).html() + variable.punctuation + ' ');
+              textInstance.translatedContent += variable.punctuation + ' ';
+            }
+      	    variable.new_sentence=true;
+      	  }
+      	  if (localStorage.autoSave==="true" && variable.sentence!=="") { localSave(); }
+      	  variable.sentence="";
+      	},time_to_period);
+        
+        //**** Translate (only final results obviously...) ****// 
+        if (localStorage.translation==="true" && source_lang!==trans_lang && localStorage.getItem("everPaid")==="true") { //last condition for paid option  	    
+    	  var newScript = document.createElement('script');
+      	  newScript.type = 'text/javascript';
+      	  var sourceText = temporary_string;//TODO: user input
+        	// WARNING: be aware that YOUR-API-KEY inside html is viewable by all your users.
+        	// Restrict your key to designated domains or use a proxy to hide your key
+        	// to avoid usage by other party.
+        	var key="AIzaSyAS9aNa8SZg6Gxk2ODnEy54_KDWpvnnFMI";//localStorage.getItem('translationKey');
+        	    
+      	  var url="../resources/update_credit.jsp";
+        	console.log(decodeURI(sourceText));//for debugging purposes...
+      	  var post2credit = $.post( url, { creditKey: localStorage.getItem("creditKey"), addCredit: "-" + decodeURI(sourceText).length});
+        	var newCredit;
+        	post2credit.done(function( data ) {
+        	  newCredit = parseInt(data);
+        	  console.log("newCredit= " + data);
+        	  if (newCredit!=-999) {
+              var source = 'https://www.googleapis.com/language/translate/v2?key='+key+'&source=' + source_lang + '&target=' + trans_lang + '&callback=translateText&q=' + sourceText;
+              newScript.src = source;
+              document.getElementsByTagName('head')[0].appendChild(newScript);
+              localStorage.setItem("currentCredit",newCredit);
+              credit_show.innerHTML = "<b>"+localStorage.getItem("currentCredit")+"</b>";
+              credit_show2.innerHTML = "<b>"+localStorage.getItem("currentCredit")+"</b>";
+        	  } else {
+        		  $("#translation_key_activity").fadeIn(500);
+        	  }
+        	});
+        }
+
+        variable.lastwasfinal=true;
+
+      } else {
+    	  variable.lastwasfinal=false;
+    	  interim_transcript += event.results[i][0].transcript;      
+      }
+    }
+    interim_span.innerHTML = linebreak(interim_transcript);
+    document.getElementById("output_panel").scrollTop = document.getElementById("output_panel").scrollHeight;
+	 } //big else - i.e. on result for trnscription (not for voice search)
+	}; //recognition.onresult
+}// defined recognition and its functions, since 'webkitSpeechRecognition' is supported in browser...
+
+function upgrade() {
+  start_button.style.visibility = 'hidden';
+  alertNotification("Web Speech API is not supported by this browser. Upgrade to <a href:'//www.google.com/chrome'>Chrome</a> version 25 or later.");
+}
+
+var two_line = /\n\n/g;
+var one_line = /\n/g;
+function linebreak(s) {
+  return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
+}
+
+var first_char = /\S/;
+function capitalize(s) {
+  return s.replace(first_char, function(m) { return m.toUpperCase(); });
+}
+
+function endVoiceSearch() {
+	if (searchFlag) {
+	  variable.intentionalPause=false;
+	  if (variable.recognizing) {
+	    pauseRecognition();
+	    return;
+	  }
+	}
+	return;
+}
+
+function searchStartButton(event) {
+	  variable.intentionalPause=false;
+	  if (variable.recognizing) {
+	    pauseRecognition();
+	    return;
+	  }
+	  localStorage.selected_language_index=select_language.selectedIndex;
+	  localStorage.selected_dialect_index=select_dialect.selectedIndex;       
+	  recognition.lang = select_dialect.value;
+	  recognition.maxAlternatives = 1; //Since I saw the 1st is really the best...
+	  recognition.continuous = false;
+	  recognition.interimResults = false;	  
+	  searchFlag = true;
+	  recognition.start();
+	  search_img.src = '../images/searchslash.png';
+}
+
+function startButton(event) {
+  variable.intentionalPause=false;
+  if (variable.recognizing) {
+    pauseRecognition();
+    return;
+  }
+  localStorage.selected_language_index=select_language.selectedIndex;
+  localStorage.selected_dialect_index=select_dialect.selectedIndex;  	  	
+  recognition.lang = select_dialect.value;
+  recognition.maxAlternatives = 1; //Since I saw the 1st is really the best...
+  updateTranslateLang();  //Make sure trans_Lang is defined
+  recognition.continuous = true;
+  recognition.interimResults = true;  
+  searchFlag = false;
+  recognition.start();
+  interim_span.innerHTML = '';
+  start_img.src = '../images/micslash2.png';
+  variable.start_timestamp = event.timeStamp;
+}
+
+function punctuationPreferences(){
+	$("#punctuation_activity").fadeIn(500);
+}
+
+function removePunctSequence(sequence,mark,position){ 
+	var dialect=select_dialect.value.split('-',1)[0];
+	var userOmitted=localStorage.getItem(dialect+"_"+mark+"_"+position+"_omit");
+	var output=sequence;
+
+  if (userOmitted!==null){ 
+	  if (userOmitted.indexOf(sequence)===-1) {userOmitted+=sequence+";"; }
+  } else userOmitted=sequence+";";
+	localStorage.setItem(dialect+"_"+mark+"_"+position+"_omit",userOmitted);
+	
+	var userAdded=localStorage.getItem(dialect+"_"+mark+"_"+position);
+	if (userAdded!==null){ //delete the sequence from the previously added sequences. If null don't bother
+	  var regex = new RegExp(sequence, "gi");
+	  userAdded=userAdded.replace(regex, "");
+	  
+	  regex = new RegExp(";;", "g");
+	  while (userAdded.indexOf(";;")!==-1){ userAdded=userAdded.replace(regex,";"); }
+	  if (userAdded[0]===";") { userAdded=userAdded.substring(1); }
+	  localStorage.setItem(dialect+"_"+mark+"_"+position,userAdded);
+	}
+
+	var tempMark=punctMarks[mark];
+  while (tempMark[position].indexOf(sequence)!==-1) { 
+	  tempMark[position].splice(tempMark[position].indexOf(sequence),1);
+  }
+	punctMarks[mark][position]=tempMark[position];
+	updateTagList(position);
+	
+	//---Send to server, and update datastore :)
+  url="../resources/update_punctuation_sequences.jsp";
+  var posting = $.post( url, { language: dialect, mark: mark, position: position, add: "-1", sequences: output });
+}
+
+function addPunctSequences(newSequences,mark,position){ 
+  var dialect=select_dialect.value.split('-',1)[0];
+	var userAdded=localStorage.getItem(dialect+"_"+mark+"_"+position);
+	var userOmitted=localStorage.getItem(dialect+"_"+mark+"_"+position+"_omit");
+	newSequences=newSequences.replace(/[$<>{}^&/]/g,' '); //Make Kosher
+  newSequences=newSequences.toLowerCase();              //Avoid doubles due to cases
+	var tempArray=newSequences.split(";");//So we can treat each one seperately
+  var tempMark=punctMarks[mark];
+  var regex;
+  var output="";
+  
+	for (var i=0; i<tempArray.length; i++ ){
+		sequence=tempArray[i];
+		if (sequence===null) continue;
+		while (sequence[0]===" ") { sequence=sequence.substring(1); }
+		while (sequence[sequence.length-1]===" ") { sequence=sequence.substring(sequence.length-1); }
+		if (sequence.length<1) continue;
+		if (userAdded!==null){
+			if (userAdded.indexOf(sequence)===-1) {	userAdded+=sequence+";"; }
+		} else userAdded=sequence+";";
+	  localStorage.setItem(dialect+"_"+mark+"_"+position,userAdded);
+	  
+	  if (tempMark[position].indexOf(sequence)===-1) { //The user doesn't already have this sequence 
+		  tempMark[position]=tempMark[position].concat([sequence]);
+		  output+=sequence+";";
+	  }
+	  
+		if (userOmitted!==null){ //delete the added sequence from the previously omitted sequences. If null don't bother
+		  regex = new RegExp(sequence, "gi");
+		  userOmitted=userOmitted.replace(regex, "");
+		  regex = new RegExp(";;", "g");
+			while (userOmitted.indexOf(";;")!==-1){ userOmitted=userOmitted.replace(regex,";"); }
+			if (userOmitted[0]===";") { userOmitted=userOmitted.substring(1); }
+			localStorage.setItem(dialect+"_"+mark+"_"+position+"_omit",userOmitted);
+		}
+	}
+	
+  punctMarks[mark][position]=tempMark[position];
+	updateTagList(position);
+	
+	//---Send to server, and update datastore :)
+	url="../resources/update_punctuation_sequences.jsp";
+	var posting = $.post( url, { language: dialect, mark: mark, position: position, add: "1", sequences: output });
+}
+
+function generateMarks(mark,position) { //outputs an array of sequences that fit (mark, position, and curren dialect)  
+ var dialect=select_dialect.value.split('-',1)[0];
+ var userAdded=localStorage.getItem(dialect+"_"+mark+"_"+position);
+ var userOmitted=localStorage.getItem(dialect+"_"+mark+"_"+position+"_omit");
+ var output=[];
+  
+ url="../resources/get_punctuation_sequences.jsp";
+ var posting = $.post( url, { language: dialect, mark: mark, position: position }, "string" );
+ 
+ //After server has finished and sent response:
+ posting.done(function( data ) { 
+  output = data.split(';');
+  output.splice(output.length-1,1);
+  console.log (dialect+" "+ mark+" "+position+": "+output+"; ");
+  
+  if (userAdded!==null){
+	  var tempArray=userAdded.split(";");//So we can treat each one seperately
+	  var sequence;
+	  for (var i=0; i<tempArray.length; i++ ){
+		  sequence=tempArray[i];
+		  if (sequence===null) continue;
+		  if (sequence.length<1) continue;
+		  if (output.indexOf(sequence)===-1) output=output.concat([sequence]);
+		}
+  }
+  
+  if (userOmitted!==null) {
+	var tempArray=userOmitted.split(';');
+	  for (var i=0; i<tempArray.length;i++){
+		  while (output.indexOf(tempArray[i])!==-1) { output.splice(output.indexOf(tempArray[i]),1) }
+	  }
+  }
+  
+  while (output.indexOf("")!==-1) {output.splice(output.indexOf(""),1);}
+  punctMarks[mark][position]=output;
+  updateTagList(position);
+ });
+}
+
+function showInfo(s) {
+  if (s) {
+    for (var child = info.firstChild; child; child = child.nextSibling) {
+      if (child.style) {
+        child.style.display = child.id == s ? 'inline' : 'none';
+      }
+    }
+    info.style.visibility = 'visible';
+  } else {
+    info.style.visibility = 'hidden';
+  }
+}
+
+function switchTranscript(timeStamp,transcript) {
+  if(document.getElementById("results_" + timeStamp)) {
+    document.getElementById("results_" + timeStamp).innerHTML=transcript;
+  }
+}
+
+function setPunctuation(sentence) { //sets the right punctuation mark for the sentence
+	variable.punctuation='.';
+	var regex="";
+	while (sentence[0]===' ') { sentence=sentence.slice(1); }//Make sure sentence starts...
+	if (markFit(sentence, "question")) {
+		variable.punctuation='?';
+		return;
+	}
+	if (markFit(sentence, "colon")) {
+		variable.punctuation=':';
+		return;
+	}
+	if (markFit(sentence, "exclamation")) {
+		variable.punctuation='!';
+		return;
+	}
+	return;
+}
+
+function markFit(sentence,mark){
+	var tempMark=punctMarks[mark];
+	for (var i=0; i<tempMark.start.length; i++){
+		regex = new RegExp(tempMark.start[i], "i");
+		if (regex.test(sentence.slice(0,tempMark.start[i].length+1))){
+			return true;
+		}
+	}
+	for (var i=0; i<tempMark.end.length; i++){
+		regex = new RegExp(tempMark.end[i], "i");
+		if (regex.test(sentence.slice(0-tempMark.end[i].length-1))){
+			return true;
+		}
+	}
+	for (var i=0; i<tempMark.any.length; i++){
+		regex = new RegExp(tempMark.any[i], "i");
+		if (regex.test(sentence)){
+			return true;
+		}
+	}
+	return false;
+}
+
+function translateText(response) {
+  if (typeof response.data==='undefined') {
+	  currentSession.transcript[currentSession.transcript.length-1].translatedContent = "";
+	  alertNotification("Translation Error. The <a style='color: blue, cursor: pointer;' onclick='$("+'"'+"#translation_key_activity"+'"'+").fadeIn(500);'>API key you entered</a> may be incorrect or you may have passed your <a target='_blank' href='https://cloud.google.com/console'>quata</a>.");
+  } else currentSession.transcript[currentSession.transcript.length-1].translatedContent=response.data.translations[0].translatedText;
+  final_translation.innerHTML += ' &nbsp ' + currentSession.transcript[currentSession.transcript.length-1].toHTML(parseFloat(localStorage.threshhold_confidence))[1];
+  if (localStorage.readOut==="true" && trans_lang==="en") {
+    temporary_html.innerHTML=response.data.translations[0].translatedText;
+    if (u.text==='speech_utterance_ended_111') { 
+      u.text = temporary_html.innerText;
+      speechSynthesis.speak(u);
+    }
+  }
+}
+
+function addZero(i) {
+  if (i<10) { i="0" + i; }
+  return i;
+}
+
+function addDoubleZero(i) {
+  if (i<100) {
+    if (i<10) {
+      i="00" + i;
+    } else {
+      i="0" + i;
+    }
+  }
+  return i;
+}
+
+function localSave() {
+  currentSession.session_title=session_title.innerText;
+  currentSession.timer=variable.timer;
+  currentSession.notes=speaker.value;
+  var json = JSON.stringify(currentSession);
+  if((JSON.stringify(localStorage).length+json.length)/1000000>2.2){ 
+    alertNotification("We were unable to save since you ran out of storage space in your browser. <br>You can clear space by deleting older sessions saved in your browser, or uncheck 'Auto Save'.");
+  }
+  if (!variable.savedOnce) { //Adds the index to the list of saved sessions.
+    variable.savedOnce=true;
+    while (localStorage.sessionsList.indexOf(saveToIndex) !== -1) {
+      saveToIndex=localStorage.sessionIndex;
+      localStorage.sessionIndex=parseFloat(localStorage.sessionIndex)+1;
+    }
+    localStorage.sessionsList+=saveToIndex+",";
+  }
+  localStorage.setItem("session_title_"+saveToIndex,session_title.innerText);//For the list...
+  localStorage.setItem("session_"+saveToIndex,json);
+  sessionsDropdown();
+}
+
+function deleteSession(sessionToDelete) {  
+  var cut="";
+  if (saveToIndex==sessionToDelete) { 
+    newButton();
+  }
+
+  cut=sessionToDelete+',';
+  localStorage.sessionsList=localStorage.sessionsList.replace(cut,"");
+  localStorage.removeItem("session_"+sessionToDelete);
+  localStorage.removeItem("session_title_"+sessionToDelete);
+  sessionsDropdown();
+}
+
+function loadSession(sessionToLoad) { //sessionToLoad could be index or the actual json to be loaded
+  pauseRecognition(); //Builtin Save if needed
+  variable=new Variables();  //Reset page variables
+  var json;
+  if (localStorage.getItem("session_"+sessionToLoad)!==null) { //'on the fly' check whether sessionToLoad is index or the actual json to be loaded
+    json = localStorage.getItem("session_"+sessionToLoad);
+    saveToIndex=sessionToLoad;
+    variable.savedOnce=true;
+  } else {
+    json=sessionToLoad;
+    saveToIndex=localStorage.sessionIndex;
+  }
+  currentSession = new Session();
+  $.extend( currentSession, JSON.parse(json) );
+    for (var i = 0; i < currentSession.transcript.length; i++) {
+      var textInstance = new TextInstance();
+      $.extend( textInstance, currentSession.transcript[i] );
+      currentSession.transcript[i]=textInstance;
+    }
+  var output=currentSession.toHTML(localStorage.threshhold_confidence);
+  final_span.innerHTML=output[0];
+  final_translation.innerHTML=output[1];
+  session_title.innerHTML=currentSession.session_title;
+  speaker.value=currentSession.notes;
+  
+  variable.firstTime=false; 
+  variable.timer=parseFloat(currentSession.timer); 
+  variable.addLineBreaks=true;
+  if (uncertain_checkbox.checked) { $('.uncertain').addClass('red_font'); }
+  else { $('.uncertain').removeClass('red_font'); }
+}
+
+function pauseRecognition() { 
+  if (variable.recognizing) {
+    variable.intentionalPause=true;
+    variable.timer=variable.timer+Date.now()-variable.start_timestamp;
+    recognition.stop();
+    variable.recognizing=false;
+  }
+  if(final_span.innerHTML.length>=2 && save_checkbox.checked) { localSave(); }
+}
+
+function toastNotification(str) {  
+  var delay=1000+str.length/5*150;
+  notification.innerHTML=str;
+  $("#notification").fadeIn(1000, function() { $("#notification").delay(delay).fadeOut(1000); });
+}
+
+function alertNotification(str,title) {  
+  bindEsc();
+	info.innerHTML=str;
+  $("#alert_container").fadeIn(500);
+  if (typeof title === 'string') {alert_title.innerHTML=title;}
+  else {alert_title.innerHTML="Please note...";}
+}
+
+function srtTime(timeMilli) {
+  var srtFormattedTime=addZero(Math.floor(timeMilli/3600000)) + ':' + addZero(Math.floor((timeMilli%3600000)/60000)) + ':' + addZero(Math.floor((timeMilli%60000)/1000)) + ',' + addDoubleZero(Math.floor(timeMilli%1000));
+  return srtFormattedTime;
+}
+
+function Session() {
+  this.transcript=new Array();
+  this.session_title;
+  this.timer=0;
+  this.notes;
+  this.toHTML=toHTML;
+
+ function toHTML(threshhold) { 
+  var temp=["",""];
+  var output=["",""];
+  var input=this.transcript;
+  for (var i = 0; i < input.length; i++) {
+    temp=input[i].toHTML(threshhold);
+    if (i>0) {
+      if (input[i].timerStart-input[i-1].timerEnd>=time_to_newline) {
+        output[0]+='<br>';
+        output[1]+='<br>';
+        if (input[i].timerStart-input[i-1].timerEnd>time_to_2lines) {
+          output[0]+='<br>';
+          output[1]+='<br>';
+        }
+      }
+    }
+    output[0]+=temp[0];
+    output[1]+=temp[1];
+  }
+  return output;
+ }
+}
+
+Session.prototype.toTXT = function(timelabels) { //if timelabels: "none"; "real"=real time; "timer"=relative time from session start
+  var outputTranscript="";
+  var outputTranslation="";  
+  var textInstance = new TextInstance(); 
+  switch (timelabels) {
+    case "none": 
+      for (var i = 0; i < this.transcript.length; i++) {
+        textInstance=this.transcript[i];
+        if (i>0) {
+          if (this.transcript[i].timerStart-this.transcript[i-1].timerEnd>=time_to_newline) {
+            outputTranscript+='<br>';
+            outputTranslation+='<br>';
+            if (this.transcript[i].timerStart-this.transcript[i-1].timerEnd>time_to_2lines) {
+              outputTranscript+='<br>';
+              outputTranslation+='<br>';
+            }
+          }
+        }
+        outputTranscript+=textInstance.textContent;
+        outputTranslation+=textInstance.translatedContent;
+      }
+      break;
+    case "real": 
+      for (var i = 0; i < this.transcript.length; i++) {
+        textInstance=this.transcript[i];
+        outputTranscript += srtTime(textInstance.timeStamp) + ' - ' + textInstance.textContent + '\r\n';
+        if (textInstance.translatedContent!=="") {
+          outputTranslation += srtTime(textInstance.timeStamp) + ' - ' + textInstance.translatedContent + '\r\n';
+        }
+      }
+      break;
+    case "timer": 
+      for (var i = 0; i < this.transcript.length; i++) {
+        textInstance=this.transcript[i];
+        outputTranscript += srtTime(textInstance.timeStart) + ' - ' + textInstance.textContent + '\r\n';
+        if (textInstance.translatedContent!=="") {
+          outputTranslation += srtTime(textInstance.timeStart) + ' - ' + textInstance.translatedContent + '\r\n';
+        }
+      }
+      break;
+    default:
+      return -1;
+  }
+  var output=outputTranscript + '\r\n -------------------------------- \r\n' + outputTranslation;
+  return output;
+};
+
+Session.prototype.toSRT = function(selector) { 
+  var output="";
+  var textInstance = new TextInstance(); 
+  switch (selector) {
+    case "transcript": 
+      for (var i = 1; i <= this.transcript.length; i++) {
+        textInstance=this.transcript[i-1];
+        output += i + '\r\n' + srtTime(textInstance.timerStart) + ' --> ' + srtTime(textInstance.timerEnd) + '\r\n' + capitalize(textInstance.textContent) + '\r\n\r\n';  
+      }
+      break;
+    case "translation": 
+      for (var i = 1; i <= this.transcript.length; i++) {
+        textInstance=this.transcript[i-1];
+        if (textInstance.translatedContent!=="") {
+          output += i + '\r\n' + srtTime(textInstance.timerStart) + ' --> ' + srtTime(textInstance.timerEnd) + '\r\n' + capitalize(textInstance.translatedContent) + '\r\n\r\n';
+        }
+      }
+      break;
+    case "combined": 
+      for (var i = 1; i <= this.transcript.length; i++) {
+        textInstance=this.transcript[i-1];
+        output += i + '\r\n' + srtTime(textInstance.timerStart) + ' --> ' + srtTime(textInstance.timerEnd) + '\r\n' + capitalize(textInstance.textContent) + '\r\n Translation: ' + capitalize(textInstance.translatedContent) + '\r\n\r\n';  
+      }
+      break;
+    default:
+      return -1;
+  }
+  return output;
+};
+
+function TextInstance() {
+  this.textContent="";
+  this.translatedContent="";
+  this.timeStamp=0;
+  this.timerStart=0;
+  this.timerEnd=0;
+  this.confidence=1;
+  this.id="";
+  this.lang="en";
+  this.targetLang="fr";
+}
+
+TextInstance.prototype.toHTML = function(threshhold) { //TODO: by lang,targetLang  in {rtl langs} set rtl
+  var output=["",""];
+  var currentTime=new Date(this.timeStamp);
+    localStorage.displayTimeFlag=select_timeDisplay.value;
+  switch (localStorage.displayTimeFlag)
+  {
+  case ("real"):
+    timeBox='<div class="realTimeDisplay timeDisplay">' + addZero(currentTime.getHours()) + ':' + addZero(currentTime.getMinutes()) + ':' + addZero(currentTime.getSeconds()) + '</div>' +
+              '<div class="difTimeDisplay">' + addZero(Math.floor(this.timerStart/3600000)) + ':' + addZero(Math.floor((this.timerStart%3600000)/60000)) + ':' + addZero(Math.floor((this.timerStart%60000)/1000)) + '</div>';
+    break;
+  case ("dif"):
+    timeBox='<div class="realTimeDisplay">' + addZero(currentTime.getHours()) + ':' + addZero(currentTime.getMinutes()) + ':' + addZero(currentTime.getSeconds()) + '</div>' +
+              '<div class="difTimeDisplay timeDisplay">' + addZero(Math.floor(this.timerStart/3600000)) + ':' + addZero(Math.floor((this.timerStart%3600000)/60000)) + ':' + addZero(Math.floor((this.timerStart%60000)/1000)) + '</div>';
+    break;
+  default:
+    timeBox='<div class="realTimeDisplay">' + addZero(currentTime.getHours()) + ':' + addZero(currentTime.getMinutes()) + ':' + addZero(currentTime.getSeconds()) + '</div>' +
+              '<div class="difTimeDisplay">' + addZero(Math.floor(this.timerStart/3600000)) + ':' + addZero(Math.floor((this.timerStart%3600000)/60000)) + ':' + addZero(Math.floor((this.timerStart%60000)/1000)) + '</div>';
+  }
+
+  //define the <a> structure for the text element:
+	if ( RTL_languages.indexOf(this.lang) != (-1) ) { //i.e. rtl language
+	  var resultsAnchorStr = '<a dir="rtl" class="results_anchor" contenteditable="false" style="cursor: text" id="results_' + this.timeStamp + '">';
+	} else { //i.e. not rtl language
+		var resultsAnchorStr = '<a class="results_anchor" contenteditable="false" style="cursor: text" id="results_' + this.timeStamp + '">'
+	}
+	if ( RTL_languages.indexOf(this.targetLang) != (-1) ) { //i.e. rtl language
+	   var transAnchorStr   = '<a dir="rtl" class="results_anchor" contenteditable="false" style="cursor: text" id="trans_'   + this.timeStamp + '">';
+	} else { //i.e. not rtl language
+	   var transAnchorStr   = '<a class="results_anchor" contenteditable="false" style="cursor: text" id="trans_'   + this.timeStamp + '">'   
+	}
+  
+  if (this.confidence<threshhold){
+    if (uncertain_checkbox.checked) {
+      output[0] = linebreak(capitalize('<span class="text_results uncertain red_font">' + resultsAnchorStr + this.textContent  +  '</a>' + timeBox + '</span>')); //TODO: get rid of linebreak(capitalize)) here and  further...
+      if (this.translatedContent!=="") { output[1] = linebreak(capitalize('<span class="text_results uncertain red_font">' + transAnchorStr + this.translatedContent + '</a>' + timeBox + '</span>')); }//
+    } else {
+      output[0] = linebreak(capitalize('<span class="text_results uncertain">' + resultsAnchorStr + this.timeStamp + '">' + this.textContent + '</a>' + timeBox + '</span>')); 
+      if (this.translatedContent!=="") { output[1] = linebreak(capitalize('<span class="text_results uncertain">' + transAnchorStr + this.translatedContent + '</a>' + timeBox + '</span>')); }
+    }
+  } else {
+    output[0] = linebreak(capitalize('<span class="text_results">' + resultsAnchorStr + this.textContent + '</a>' + timeBox + '</span>')); //NICE:+ alt_suggestions in span optional... 
+      if (this.translatedContent!=="") { output[1] = linebreak(capitalize('<span class="text_results">' + transAnchorStr + this.translatedContent + '</a>' + timeBox + '</span>')); }    
+  }
+  return output;
+};
+
+function PunctMarks(){
+  this.question    = new PunctuationMark('question');
+  this.colon       = new PunctuationMark('colon');
+  this.exclamation = new PunctuationMark('exclamation');
+}
+
+function PunctuationMark(mark) {
+  this.start=[];
+  this.end=[];
+  this.any=[];
+  generateMarks(mark,"start");
+  generateMarks(mark,"end");
+  generateMarks(mark,"any");
+}
+</script>
+<script>//Google analytics
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-47292499-1', 'speechlogger.appspot.com');
+  ga('send', 'pageview');
+
+</script>
+
+
+	
+</body>
+</html>
