@@ -1,0 +1,13 @@
+Transcript:
+-------------------
+  Hello. 
+  How are you today? 
+  This is a demonstration.
+
+Translation
+-------------------
+  ¡Hola. 
+  Cómo estás hoy? 
+  Esta es una demostración
+
+Speechlogger :) www.speechlogger.com
